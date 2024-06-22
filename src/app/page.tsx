@@ -1,4 +1,5 @@
 import Header from "@/components/header";
+import Board from "@/components/board";
 import BgGradient from "@/components/bg-gradient";
 
 export default function Home() {
@@ -6,7 +7,7 @@ export default function Home() {
     <main>
       <BgGradient />
       <Header />
-      <h1>Hello World</h1>
+      <Board />
     </main>
   );
 }
