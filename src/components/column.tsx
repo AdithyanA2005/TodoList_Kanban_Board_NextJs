@@ -6,6 +6,7 @@ import { todoColumnIdToTitle } from "@/lib/utils";
 import TodoCard from "@/components/todo-card";
 import { useBoardStore } from "@/store/board-store";
 import { debounce } from "next/dist/server/utils";
+import { useModalStore } from "@/store/modal-store";
 
 interface ColumnProps {
   id: IColumnTypes;
@@ -14,14 +15,17 @@ interface ColumnProps {
 }
 
 export default function Column({ id, todos, index }: ColumnProps) {
-  const [searchString, setSearchString] = useBoardStore((state) => [
-    state.searchString,
-    state.setSearchString,
-  ]);
+  const { searchString, setSearchString, setNewTaskType } = useBoardStore();
+  const { openModal } = useModalStore();
+
   const searchCheck = (query: string, value: string): boolean => {
     // Return true if no query or if it's matching
     if (!query) return true;
     return value.toLowerCase().includes(query.toLowerCase());
+  };
+  const handleAddTodo = () => {
+    setNewTaskType(id); // Select the radio according to column id(todo, doing, done)
+    openModal();
   };
 
   return (
@@ -67,7 +71,7 @@ export default function Column({ id, todos, index }: ColumnProps) {
                   {provided.placeholder}
 
                   <div className="flex justify-end items-end p-2">
-                    <button className="text-green-500 hover:text-green-600">
+                    <button onClick={handleAddTodo} className="text-green-500 hover:text-green-600">
                       <PlusCircleIcon className="h-10 w-10" />
                     </button>
                   </div>
