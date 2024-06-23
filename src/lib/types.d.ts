@@ -6,7 +6,7 @@ interface ITodo {
   $updatedAt: string;
   title: string;
   status: IColumnTypes;
-  image?: URL;
+  image?: IImage;
 }
 
 interface IColumn {

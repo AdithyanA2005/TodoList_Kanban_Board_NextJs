@@ -3,6 +3,7 @@ import {
   DraggableProvidedDraggableProps,
   DraggableProvidedDragHandleProps,
 } from "@hello-pangea/dnd";
+import { useBoardStore } from "@/store/board-store";
 
 export default function TodoCard({
   todo,
@@ -19,6 +20,8 @@ export default function TodoCard({
   draggableProps: DraggableProvidedDraggableProps;
   dragHandleProps: DraggableProvidedDragHandleProps | null | undefined;
 }) {
+  const deleteTask = useBoardStore((state) => state.deleteTask);
+
   return (
     <div
       {...draggableProps}
@@ -28,7 +31,10 @@ export default function TodoCard({
     >
       <div className="flex justify-between items-center p-5">
         <p className="">{todo.title}</p>
-        <button className="text-red-500 hover:text-red-600">
+        <button
+          onClick={() => deleteTask(index, todo, id)}
+          className="text-red-500 hover:text-red-600"
+        >
           <XCircleIcon className="ml-5 h-8 w-8" />
         </button>
 
