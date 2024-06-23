@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { useBoardStore } from "@/store/board-store";
 import Column from "@/components/column";
-import { step } from "next/dist/experimental/testmode/playwright/step";
 
 export default function Board() {
-  const [board, getBoard, setBoardState] = useBoardStore((state) => [
+  const [board, getBoard, setBoardState, updateTodoInDb] = useBoardStore((state) => [
     state.board,
     state.getBoard,
     state.setBoardState,
+    state.updateTodoInDb,
   ]);
 
   const handleDragEnd = (result: DropResult) => {
@@ -29,7 +29,7 @@ export default function Board() {
         setBoardState({ ...board, columns: reArrangedColumns });
         break;
       case "card":
-        // This step is necessary as the indexes are stored as numbers) 0, 1, 2, etc), instead of id's with DND library
+        // This step is necessary as the indexes are stored as numbers(0, 1, 2, etc), instead of id's with DND library
         // droppable id here will be indices(typeof string) of the column
         const columns = Array.from(board.columns);
         const sourceColEntry = columns[Number(source.droppableId)];
@@ -57,27 +57,29 @@ export default function Board() {
             id: sourceCol.id,
             todos: newTodos,
           };
-          const newColumns = new Map(board.columns)
-          newColumns.set(sourceCol.id, newCol)
-          setBoardState({...board, columns: newColumns})
+          const newColumns = new Map(board.columns);
+          newColumns.set(sourceCol.id, newCol);
+          setBoardState({ ...board, columns: newColumns });
         } else {
           // Dragging to another column
           const finishedTodos = Array.from(destinationCol.todos);
-          finishedTodos.splice(destination.index, 1, todoMoved)
+          finishedTodos.splice(destination.index, 1, todoMoved);
 
-          const newColumns = new Map(board.columns)
+          const newColumns = new Map(board.columns);
           const newCol = {
             id: sourceCol.id,
             todos: newTodos,
           };
 
-          newColumns.set(sourceCol.id, newCol)
+          newColumns.set(sourceCol.id, newCol);
           newColumns.set(destinationCol.id, {
             id: destinationCol.id,
-            todos: finishedTodos
-          })
+            todos: finishedTodos,
+          });
 
-          setBoardState({...board, columns: newColumns})
+          updateTodoInDb(todoMoved, destinationCol.id);
+
+          setBoardState({ ...board, columns: newColumns });
         }
     }
   };
@@ -89,7 +91,7 @@ export default function Board() {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="board" direction="horizontal" type="column">
-        {(provided, snapshot) => (
+        {(provided) => (
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
