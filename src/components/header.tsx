@@ -13,17 +13,13 @@ export default function Header() {
 
   return (
     <header>
-      <div className="flex flex-col md:flex-row items-center p-5 bg-muted rounded-b-2xl">
+      <div className="flex flex-col md:flex-row items-center p-5 bg-muted rounded-b-2xl mb-5">
         <Logo />
 
         <div className="flex items-center space-x-5 flex-1 justify-end w-full">
           <SearchBox value={searchString} onChange={(e) => setSearchString(e.target.value)} />
           <UserDropdown />
         </div>
-      </div>
-
-      <div className="flex items-center justify-center px-5 md:py-5">
-        <AiSuggestion />
       </div>
     </header>
   );
@@ -68,15 +64,5 @@ function UserDropdown() {
       {/*TODO: Implement a dropdown menu*/}
       <Avatar name="Adithyan A" round color="var(--primary)" size="50" />
     </div>
-  );
-}
-
-function AiSuggestion() {
-  return (
-    <p className=" flex items-center text-sm font-light p-5 shadow-xl rounded-xl w-fit bg-white italic max-w-3xl text-primary">
-      <UserCircleIcon className="inline-block h-10 w-10 text-[inherit] mr-1 " />
-      {/*TODO: Get AI to do the work*/}
-      AI is summarizing your tasks please wait. This may take a few seconds. 🤖
-    </p>
   );
 }
