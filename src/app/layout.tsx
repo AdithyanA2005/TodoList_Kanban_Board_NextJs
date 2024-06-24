@@ -2,8 +2,8 @@ import "./globals.css";
 import React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Modal from "@/components/modal";
 import BgGradient from "@/components/bg-gradient";
+import NewTodoModal from "@/components/new-todo-modal";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -21,7 +21,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <body className={inter.className}>
         {children}
-        <Modal />
+        <NewTodoModal />
         <BgGradient />
       </body>
     </html>

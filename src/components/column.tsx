@@ -17,7 +17,7 @@ interface ColumnProps {
 
 export default function Column({ id, todos, index }: ColumnProps) {
   const { searchString, setSearchString, setNewTaskType } = useBoardStore();
-  const { openModal } = useModalStore();
+  const { openNewTodoModal } = useModalStore();
 
   const searchCheck = (query: string, value: string): boolean => {
     // Return true if no query or if it's matching
@@ -26,7 +26,7 @@ export default function Column({ id, todos, index }: ColumnProps) {
   };
   const handleAddTodo = () => {
     setNewTaskType(id); // Select the radio according to column id(todo, doing, done)
-    openModal();
+    openNewTodoModal();
   };
 
   return (
