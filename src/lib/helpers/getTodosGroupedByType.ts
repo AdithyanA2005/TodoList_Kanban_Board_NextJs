@@ -1,6 +1,6 @@
 import { databases } from "@/lib/appwrite";
 
-export default async function getTodosGroupedByColum() {
+export default async function getTodosGroupedByType(): Promise<IColumns> {
   const data = await databases.listDocuments(
     process.env.NEXT_PUBLIC_AW_DATABASE_ID!,
     process.env.NEXT_PUBLIC_AW_TODOS_COLLECTION_ID!,
@@ -43,7 +43,6 @@ export default async function getTodosGroupedByColum() {
   // TODO: Sort columns according to the users preference
   const sortedColumns = columns;
 
-  // Return the columns in a board
-  const board: IBoard = { columns: sortedColumns };
-  return board;
+  // Return the columns
+  return sortedColumns;
 }

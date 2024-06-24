@@ -6,7 +6,7 @@ import { useBoardStore } from "@/store/board-store";
 import Column from "@/components/column";
 
 export default function Board() {
-  const { board, getBoard, setBoardState, updateTask } = useBoardStore();
+  const { columns, setColumns, fetchColumns, updateTask } = useBoardStore();
 
   const handleDragEnd = (result: DropResult) => {
     const { destination, source, type } = result;
@@ -17,18 +17,18 @@ export default function Board() {
     // Handle different types of drags
     switch (type) {
       case "column":
-        const entries = Array.from(board.columns);
+        const entries = Array.from(columns);
         const [removed] = entries.splice(source.index, 1);
         entries.splice(destination.index, 0, removed);
         const reArrangedColumns = new Map(entries);
-        setBoardState({ ...board, columns: reArrangedColumns });
+        setColumns(reArrangedColumns);
         break;
       case "card":
         // This step is necessary as the indexes are stored as numbers(0, 1, 2, etc), instead of id's with DND library
         // droppable id here will be indices(typeof string) of the column
-        const columns = Array.from(board.columns);
-        const sourceColEntry = columns[Number(source.droppableId)];
-        const destinationColEntry = columns[Number(destination.droppableId)];
+        const columnsArray = Array.from(columns);
+        const sourceColEntry = columnsArray[Number(source.droppableId)];
+        const destinationColEntry = columnsArray[Number(destination.droppableId)];
 
         const sourceCol: IColumn = {
           id: sourceColEntry[0],
@@ -52,15 +52,15 @@ export default function Board() {
             id: sourceCol.id,
             todos: newTodos,
           };
-          const newColumns = new Map(board.columns);
+          const newColumns = new Map(columns);
           newColumns.set(sourceCol.id, newCol);
-          setBoardState({ ...board, columns: newColumns });
+          setColumns(newColumns);
         } else {
           // Dragging to another column
           const finishedTodos = Array.from(destinationCol.todos);
           finishedTodos.splice(destination.index, 1, todoMoved);
 
-          const newColumns = new Map(board.columns);
+          const newColumns = new Map(columns);
           const newCol = {
             id: sourceCol.id,
             todos: newTodos,
@@ -74,14 +74,14 @@ export default function Board() {
 
           updateTask(todoMoved, destinationCol.id);
 
-          setBoardState({ ...board, columns: newColumns });
+          setColumns(newColumns);
         }
     }
   };
 
   useEffect(() => {
-    getBoard();
-  }, [getBoard]);
+    fetchColumns();
+  }, [fetchColumns]);
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
@@ -92,7 +92,7 @@ export default function Board() {
             ref={provided.innerRef}
             className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-7xl mx-auto py-4 px-2 md:px-4"
           >
-            {Array.from(board.columns.entries()).map(([columnId, column], index) => (
+            {Array.from(columns.entries()).map(([columnId, column], index) => (
               <Column key={columnId} id={columnId} todos={column.todos} index={index} />
             ))}
           </div>

@@ -1,12 +1,17 @@
 type IColumnTypes = "todo" | "doing" | "done";
 
+interface IImage {
+  bucketId: string;
+  fileId: string;
+}
+
 interface ITodo {
   $id: string;
   $createdAt: string;
   $updatedAt: string;
   title: string;
   status: IColumnTypes;
-  image?: `${IImage}` ;
+  image?: `${IImage}`;
 }
 
 interface IColumn {
@@ -14,14 +19,7 @@ interface IColumn {
   todos: ITodo[];
 }
 
-interface IBoard {
-  columns: Map<IColumnTypes, IColumn>;
-}
-
-interface IImage {
-  bucketId: string;
-  fileId: string;
-}
+type IColumns = Map<IColumnTypes, IColumn>;
 
 declare namespace NodeJS {
   interface ProcessEnv {

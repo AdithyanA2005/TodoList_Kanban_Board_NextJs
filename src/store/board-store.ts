@@ -1,12 +1,13 @@
 import { create } from "zustand";
-import getTodosGroupedByColum from "@/lib/helpers/getTodosGroupedByColumn";
+import getTodosGroupedByType from "@/lib/helpers/getTodosGroupedByType";
 import { databases, ID, storage } from "@/lib/appwrite";
 import uploadImage from "@/lib/helpers/uploadImage";
 
 interface BoardState {
-  board: IBoard;
-  getBoard: () => void;
-  setBoardState: (board: IBoard) => void;
+  columns: IColumns;
+  setColumns: (columns: IColumns) => void;
+  fetchColumns: () => void;
+
   searchString: string;
   setSearchString: (searchString: string) => void;
 
@@ -23,12 +24,8 @@ interface BoardState {
 }
 
 export const useBoardStore = create<BoardState>((set, get) => ({
-  board: { columns: new Map<IColumnTypes, IColumn>() },
-  getBoard: async () => {
-    const board = await getTodosGroupedByColum();
-    set({ board });
-  },
-  setBoardState: (board) => set({ board }),
+  columns: new Map<IColumnTypes, IColumn>(),
+  setColumns: (columns) => set({ columns }),
 
   searchString: "",
   setSearchString: (searchString) => set({ searchString }),
@@ -42,17 +39,9 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   image: null,
   setImage: (image: File | null) => set({ image }),
 
-  updateTask: async (todo, columnId) => {
-    await databases.updateDocument(
-      process.env.NEXT_PUBLIC_AW_DATABASE_ID!,
-      process.env.NEXT_PUBLIC_AW_TODOS_COLLECTION_ID!,
-      todo.$id,
-      {
-        title: todo.title,
-        status: columnId,
-        ...(todo.image ? { image: todo.image } : {}),
-      },
-    );
+  fetchColumns: async () => {
+    const columns = await getTodosGroupedByType();
+    set({ columns });
   },
 
   addTask: async (todo, columnId, image) => {
@@ -88,7 +77,7 @@ export const useBoardStore = create<BoardState>((set, get) => ({
 
     // Change the state by adding the newly created record
     set((state) => {
-      const newColumns = new Map(state.board.columns);
+      const newColumns = new Map(state.columns);
       const newTodoParsed: ITodo = {
         $id,
         title: todo,
@@ -103,18 +92,29 @@ export const useBoardStore = create<BoardState>((set, get) => ({
       else newColumns.get(columnId)?.todos.push(newTodoParsed);
 
       return {
-        board: {
-          columns: newColumns,
-        },
+        columns: newColumns,
       };
     });
   },
 
+  updateTask: async (todo, columnId) => {
+    await databases.updateDocument(
+      process.env.NEXT_PUBLIC_AW_DATABASE_ID!,
+      process.env.NEXT_PUBLIC_AW_TODOS_COLLECTION_ID!,
+      todo.$id,
+      {
+        title: todo.title,
+        status: columnId,
+        ...(todo.image ? { image: todo.image } : {}),
+      },
+    );
+  },
+
   deleteTask: async (taskIndex, todo, id) => {
     // Delete the task from the column
-    const newColumns = new Map(get().board.columns);
+    const newColumns = new Map(get().columns);
     const column = newColumns.get(id)?.todos.splice(taskIndex, 1);
-    set({ board: { columns: newColumns } });
+    set({ columns: newColumns });
 
     // Delete the image from the storage
     if (todo.image) {
