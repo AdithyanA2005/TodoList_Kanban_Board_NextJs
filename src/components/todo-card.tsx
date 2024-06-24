@@ -43,27 +43,27 @@ export default function TodoCard({
       ref={innerRef}
       className="group bg-white rounded-sm drop-shadow-md"
     >
-      <div className="flex justify-between items-center px-4 py-5">
-        <p className="">{todo.title}</p>
-        <button
-          onClick={() => deleteTask(index, todo, id)}
-          className="absolute top-2 right-2 ml-5 hidden group-hover:block text-gray-400 hover:text-red-600"
-        >
-          <XMarkIcon className="size-6" />
-        </button>
-      </div>
-
       {imageUrl ? (
-        <div className="h-full w-full rounded-b-md">
+        <div className="h-full w-full rounded-t-md">
           <Image
             src={imageUrl}
             alt="Task Image"
             width={400}
             height={200}
-            className="w-full object-contain rounded-b-md"
+            className="w-full object-contain rounded-[inherit]"
           />
         </div>
       ) : null}
+
+      <div className="flex justify-between items-center px-4 py-5">
+        <p>{todo.title}</p>
+        <button
+          onClick={() => deleteTask(index, todo, id)}
+          className="absolute top-2.5 right-2.5 bg-white/30 filter backdrop-blur-3xl p-1 rounded-full ml-5 hidden group-hover:block text-gray-600 hover:text-red-600"
+        >
+          <XMarkIcon className="size-[20px]" />
+        </button>
+      </div>
     </div>
   );
 }

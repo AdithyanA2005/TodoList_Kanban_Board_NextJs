@@ -13,7 +13,7 @@ export default function Header() {
 
   return (
     <header>
-      <div className="flex flex-col md:flex-row items-center p-5 bg-muted rounded-b-2xl mb-5">
+      <div className="flex flex-col md:flex-row items-center py-3 px-5 bg-white/5 filter backdrop-blur-3xl rounded-b-2xl">
         <Logo />
 
         <div className="flex items-center space-x-5 flex-1 justify-end w-full">
@@ -32,9 +32,9 @@ interface SearchBoxProps {
 
 function Logo() {
   return (
-    <h1 className="flex items-center space-x-2 text-2xl font-bold font-mono text-primary">
+    <h1 className="hover:scale-105 transition rounded-md filter backdrop-blur-3xl py-1 px-2 flex items-center space-x-2 text-2xl font-bold font-mono text-primary">
       <CheckCircleIcon className="h-10 w-10 text-primary" />
-      <span>Kanban Todo</span>
+      <span>AdisTodo</span>
     </h1>
   );
 }

@@ -5,7 +5,6 @@ import BgGradient from "@/components/bg-gradient";
 export default function Home() {
   return (
     <main>
-      <BgGradient />
       <Header />
       <Board />
     </main>

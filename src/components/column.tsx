@@ -7,6 +7,7 @@ import TodoCard from "@/components/todo-card";
 import { useBoardStore } from "@/store/board-store";
 import { debounce } from "next/dist/server/utils";
 import { useModalStore } from "@/store/modal-store";
+import { PlusIcon } from "@heroicons/react/24/outline";
 
 interface ColumnProps {
   id: IColumnTypes;
@@ -39,13 +40,19 @@ export default function Column({ id, todos, index }: ColumnProps) {
                 ref={provided.innerRef}
                 className={`p-2 rounded-2xl shadow-sm ${snapshot.isDraggingOver ? "bg-green-200" : "bg-white/50"}`}
               >
-                <h2 className="flex justify-between font-bold text-xl p-2">
-                  {todoColumnIdToTitle(id)}
-                  <span className="text-gray-500 bg-gray-200 rounded-full px-2 py-1 font-mono text-xs flex justify-center items-center">
-                    {!searchString
-                      ? todos.length
-                      : todos.filter((todo) => searchCheck(searchString, todo.title)).length}
-                  </span>
+                <h2 className="flex justify-between font-bold text-xl p-1.5">
+                  <div className="flex items-center gap-1">
+                    <span>{todoColumnIdToTitle(id)}</span>
+                    <span className="h-7 aspect-square text-gray-500 bg-gray-200 rounded-full px-2 py-1 font-mono text-xs flex justify-center items-center">
+                      {!searchString
+                        ? todos.length
+                        : todos.filter((todo) => searchCheck(searchString, todo.title)).length}
+                    </span>
+                  </div>
+
+                  <button onClick={handleAddTodo} className="rounded-full bg-gray-200/50 hover:bg-green-200/80 filter backdrop-blur-3xl p-[5px] text-gray-700 hover:text-green-800">
+                    <PlusIcon className="size-[22px]" />
+                  </button>
                 </h2>
 
                 <div className="space-y-2">
@@ -70,11 +77,8 @@ export default function Column({ id, todos, index }: ColumnProps) {
 
                   {provided.placeholder}
 
-                  <div className="flex justify-end items-end p-2">
-                    <button onClick={handleAddTodo} className="text-green-500 hover:text-green-600">
-                      <PlusCircleIcon className="h-10 w-10" />
-                    </button>
-                  </div>
+                  {/*<div className="flex justify-end items-end p-2">*/}
+                  {/*</div>*/}
                 </div>
               </div>
             )}
