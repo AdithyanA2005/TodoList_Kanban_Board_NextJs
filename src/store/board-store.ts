@@ -1,7 +1,8 @@
 import { create } from "zustand";
-import getTodosGroupedByType from "@/lib/helpers/getTodosGroupedByType";
 import { databases, ID, storage } from "@/lib/appwrite";
+import { getColumnFromLocalStorage, setColumnsInLocalStorage } from "@/lib/utils";
 import uploadImage from "@/lib/helpers/uploadImage";
+import getTodosGroupedByType from "@/lib/helpers/getTodosGroupedByType";
 
 interface BoardState {
   columns: IColumns;
@@ -24,7 +25,7 @@ interface BoardState {
 }
 
 export const useBoardStore = create<BoardState>((set, get) => ({
-  columns: new Map<IColumnTypes, IColumn>(),
+  columns: new Map<IColumnTypes, IColumn>(getColumnFromLocalStorage()),
   setColumns: (columns) => set({ columns }),
 
   searchString: "",
@@ -41,6 +42,7 @@ export const useBoardStore = create<BoardState>((set, get) => ({
 
   fetchColumns: async () => {
     const columns = await getTodosGroupedByType();
+    setColumnsInLocalStorage(columns);
     set({ columns });
   },
 

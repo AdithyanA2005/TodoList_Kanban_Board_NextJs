@@ -21,8 +21,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <body className={inter.className}>
         {children}
-        <NewTodoModal />
+
         <BgGradient />
+        <NewTodoModal />
       </body>
     </html>
   );
