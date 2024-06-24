@@ -7,16 +7,18 @@ interface BoardState {
   board: IBoard;
   getBoard: () => void;
   setBoardState: (board: IBoard) => void;
-  updateTodoInDb: (todo: ITodo, columnId: IColumnTypes) => void;
   searchString: string;
   setSearchString: (searchString: string) => void;
+
+  image: File | null;
+  setImage: (image: File | null) => void;
   newTaskInput: string;
   setNewTaskInput: (newTaskInput: string) => void;
   newTaskType: IColumnTypes;
-  image: File | null;
-  setImage: (image: File | null) => void;
   setNewTaskType: (columnId: IColumnTypes) => void;
+
   addTask: (todo: string, columnId: IColumnTypes, image?: File | null) => void;
+  updateTask: (todo: ITodo, columnId: IColumnTypes) => void;
   deleteTask: (taskIndex: number, todo: ITodo, id: IColumnTypes) => void;
 }
 
@@ -40,7 +42,7 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   image: null,
   setImage: (image: File | null) => set({ image }),
 
-  updateTodoInDb: async (todo, columnId) => {
+  updateTask: async (todo, columnId) => {
     await databases.updateDocument(
       process.env.NEXT_PUBLIC_AW_DATABASE_ID!,
       process.env.NEXT_PUBLIC_AW_TODOS_COLLECTION_ID!,

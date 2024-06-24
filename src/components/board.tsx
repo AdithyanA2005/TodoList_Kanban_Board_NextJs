@@ -6,12 +6,7 @@ import { useBoardStore } from "@/store/board-store";
 import Column from "@/components/column";
 
 export default function Board() {
-  const [board, getBoard, setBoardState, updateTodoInDb] = useBoardStore((state) => [
-    state.board,
-    state.getBoard,
-    state.setBoardState,
-    state.updateTodoInDb,
-  ]);
+  const { board, getBoard, setBoardState, updateTask } = useBoardStore();
 
   const handleDragEnd = (result: DropResult) => {
     const { destination, source, type } = result;
@@ -77,7 +72,7 @@ export default function Board() {
             todos: finishedTodos,
           });
 
-          updateTodoInDb(todoMoved, destinationCol.id);
+          updateTask(todoMoved, destinationCol.id);
 
           setBoardState({ ...board, columns: newColumns });
         }

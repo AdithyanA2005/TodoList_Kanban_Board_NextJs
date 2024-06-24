@@ -6,28 +6,18 @@ import { useBoardStore } from "@/store/board-store";
 import { ChangeEventHandler } from "react";
 
 export default function Header() {
-  const [searchString, setSearchString] = useBoardStore((state) => [
-    state.searchString,
-    state.setSearchString,
-  ]);
-
   return (
     <header>
       <div className="flex flex-col md:flex-row items-center py-3 px-5 bg-white/5 filter backdrop-blur-3xl rounded-b-2xl">
         <Logo />
 
         <div className="flex items-center space-x-5 flex-1 justify-end w-full">
-          <SearchBox value={searchString} onChange={(e) => setSearchString(e.target.value)} />
+          <SearchBox />
           <UserDropdown />
         </div>
       </div>
     </header>
   );
-}
-
-interface SearchBoxProps {
-  value: string;
-  onChange: ChangeEventHandler<HTMLInputElement>;
 }
 
 function Logo() {
@@ -39,18 +29,21 @@ function Logo() {
   );
 }
 
-function SearchBox({ value, onChange }: SearchBoxProps) {
-  // TODO: Add debounce
+function SearchBox() {
+  const { searchString, setSearchString } = useBoardStore();
+
   return (
     <form className="flex items-center space-x-2 bg-white rounded-md p-2 shadow-md flex-1 md:flex-initial">
       <MagnifyingGlassIcon className="h-6 w-6 text-gray-400" />
+
       <input
         type="text"
         placeholder="Search"
-        value={value}
-        onChange={onChange}
+        value={searchString}
+        onChange={(e) => setSearchString(e.target.value)}
         className="flex-1 outline-none p-1"
       />
+
       <button type="submit" hidden>
         Search
       </button>
