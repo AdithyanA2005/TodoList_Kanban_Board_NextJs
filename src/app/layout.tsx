@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import BgGradient from "@/components/bg-gradient";
 import NewTodoModal from "@/components/new-todo-modal";
+import Alerts from "@/components/alerts";
+import AuthModal from "@/components/auth-modal";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -24,6 +26,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
         <BgGradient />
         <NewTodoModal />
+        <Alerts />
       </body>
     </html>
   );
