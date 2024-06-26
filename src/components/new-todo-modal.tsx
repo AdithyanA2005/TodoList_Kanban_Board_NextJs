@@ -60,7 +60,7 @@ export default function NewTodoModal() {
       />
       <TaskTypeRadioGroup />
       <ImageField />
-      <FormModalSubmitButton btnText="Add Task" disabled={!title} />
+      <FormModalSubmitButton btnText="Add Task" />
     </FormModalWrapper>
   );
 }
