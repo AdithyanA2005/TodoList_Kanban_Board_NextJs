@@ -1,5 +1,14 @@
 import React, { FormEventHandler, Fragment } from "react";
-import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
+import {
+  CloseButton,
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
+  Transition,
+  TransitionChild,
+} from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 interface FormModalWrapperProps {
   title: string;
@@ -19,18 +28,10 @@ export default function FormModalWrapper({
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="form" onSubmit={onSubmit} onClose={onClose} className="relative z-10">
-        {/*Using this transition child to apply transition to the backdrop*/}
-        <TransitionChild
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opcaity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-black/25" />
-        </TransitionChild>
+        <DialogBackdrop
+          transition
+          className="fixed inset-0 bg-black/30 duration-300 ease-out data-[closed]:opacity-0"
+        />
 
         {/*Modal Body*/}
         <div className="fixed inset-0 overflow-y-auto">
@@ -45,9 +46,14 @@ export default function FormModalWrapper({
               leaveTo="opacity-0 scale-95"
             >
               <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <DialogTitle as="h2" className="text-xl font-medium leading-6 text-gray-900 pb-2">
-                  {title}
-                </DialogTitle>
+                <div className="flex justify-between items-center pb-4">
+                  <DialogTitle as="h2" className="text-xl font-medium leading-6 text-gray-900">
+                    {title}
+                  </DialogTitle>
+                  <CloseButton>
+                    <XMarkIcon className="size-[20px] text-gray-800" />
+                  </CloseButton>
+                </div>
 
                 {children}
               </DialogPanel>
