@@ -1,9 +1,7 @@
 import { Account, Client, Databases, Storage, ID } from "appwrite";
+import env from "@/lib/env";
 
-const client = new Client()
-  .setEndpoint(process.env.NEXT_PUBLIC_AW_ENDPOINT!)
-  .setProject(process.env.NEXT_PUBLIC_AW_PROJECT_ID!);
-
+const client = new Client().setEndpoint(env.awEndpoint).setProject(env.awProjectId);
 const account = new Account(client);
 const databases = new Databases(client);
 const storage = new Storage(client);

@@ -1,12 +1,10 @@
+import env from "@/lib/env";
 import { databases } from "@/lib/appwrite";
 import { ETaskTypes } from "@/types/enums";
 import { IColumn, IColumns } from "@/types/models/column";
 
 export default async function getTodosGroupedByType(): Promise<IColumns> {
-  const data = await databases.listDocuments(
-    process.env.NEXT_PUBLIC_AW_DATABASE_ID!,
-    process.env.NEXT_PUBLIC_AW_TODOS_COLLECTION_ID!,
-  );
+  const data = await databases.listDocuments(env.awDatabaseId, env.awTodosCollectionId);
 
   // Group the to-dos by column
   const columns = data.documents.reduce((acc, todo) => {

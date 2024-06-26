@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import env from "@/lib/env";
 import { databases, ID, storage } from "@/lib/appwrite";
 import uploadImage from "@/lib/appwrite/uploadImage";
 import getTodosGroupedByType from "@/lib/appwrite/getTodosGroupedByType";
@@ -76,8 +77,8 @@ export const useBoardStore = create<BoardState>((set, get) => ({
 
     // Create a new record in DB
     const { $id, $createdAt, $updatedAt } = await databases.createDocument(
-      process.env.NEXT_PUBLIC_AW_DATABASE_ID!,
-      process.env.NEXT_PUBLIC_AW_TODOS_COLLECTION_ID!,
+      env.awDatabaseId,
+      env.awTodosCollectionId,
       ID.unique(),
       {
         title: todo,
@@ -112,16 +113,11 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   },
 
   updateTask: async (todo, columnId) => {
-    await databases.updateDocument(
-      process.env.NEXT_PUBLIC_AW_DATABASE_ID!,
-      process.env.NEXT_PUBLIC_AW_TODOS_COLLECTION_ID!,
-      todo.$id,
-      {
-        title: todo.title,
-        status: columnId,
-        ...(todo.image ? { image: todo.image } : {}),
-      },
-    );
+    await databases.updateDocument(env.awDatabaseId, env.awTodosCollectionId, todo.$id, {
+      title: todo.title,
+      status: columnId,
+      ...(todo.image ? { image: todo.image } : {}),
+    });
   },
 
   deleteTask: async (taskIndex, todo, id) => {
@@ -136,10 +132,6 @@ export const useBoardStore = create<BoardState>((set, get) => ({
     }
 
     // Delete the task from the database
-    await databases.deleteDocument(
-      process.env.NEXT_PUBLIC_AW_DATABASE_ID!,
-      process.env.NEXT_PUBLIC_AW_TODOS_COLLECTION_ID!,
-      todo.$id,
-    );
+    await databases.deleteDocument(env.awDatabaseId, env.awTodosCollectionId, todo.$id);
   },
 }));
