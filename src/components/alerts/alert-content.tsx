@@ -1,5 +1,5 @@
 import React from "react";
-import { getAlertColors } from "@/lib/utils";
+import getAlertColors from "@/lib/utils/get-alert-colors";
 import { EAlertTypes } from "@/types/enums";
 
 interface AlertContentProps {

@@ -5,7 +5,7 @@ import {
   InformationCircleIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
-import { getAlertColors } from "@/lib/utils";
+import getAlertColors from "@/lib/utils/get-alert-colors";
 import { EAlertTypes } from "@/types/enums";
 
 interface AlertIconProps {

@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
 import { Transition } from "@headlessui/react";
-import { getAlertColors } from "@/lib/utils";
-import { EAlertTypes } from "@/types/enums";
 import clsx from "clsx";
+import getAlertColors from "@/lib/utils/get-alert-colors";
+import { EAlertTypes } from "@/types/enums";
 
 interface AlertContainerProps {
   children: React.ReactNode;

@@ -1,17 +1,6 @@
-import { EAlertTypes, ETaskTypes } from "@/types/enums";
+import { EAlertTypes } from "@/types/enums";
 
-export function todoColumnIdToTitle(id: ETaskTypes) {
-  switch (id) {
-    case "todo":
-      return "To Do";
-    case "doing":
-      return "In Progress";
-    case "done":
-      return "Done";
-  }
-}
-
-export function getAlertColors(type: EAlertTypes) {
+export default function getAlertColors(type: EAlertTypes) {
   switch (type) {
     case "success":
       return {
@@ -45,4 +34,3 @@ export function getAlertColors(type: EAlertTypes) {
       };
   }
 }
-

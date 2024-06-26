@@ -3,9 +3,9 @@
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import TodoCard from "@/components/todo-card";
+import getColumnDisplayName from "@/lib/utils/get-column-display-name";
 import { useBoardStore } from "@/lib/store/board-store";
 import { useModalStore } from "@/lib/store/modal-store";
-import { todoColumnIdToTitle } from "@/lib/utils";
 import { ETaskTypes } from "@/types/enums";
 import { ITodo } from "@/types/models/task";
 
@@ -42,7 +42,7 @@ export default function Column({ id, todos, index }: ColumnProps) {
               >
                 <h2 className="flex justify-between font-bold text-xl p-1.5">
                   <div className="flex items-center gap-1">
-                    <span>{todoColumnIdToTitle(id)}</span>
+                    <span>{getColumnDisplayName(id)}</span>
                     <span className="h-7 aspect-square text-gray-500 bg-gray-200 rounded-full px-2 py-1 font-mono text-xs flex justify-center items-center">
                       {!searchString
                         ? todos.length
@@ -50,7 +50,10 @@ export default function Column({ id, todos, index }: ColumnProps) {
                     </span>
                   </div>
 
-                  <button onClick={handleAddTodo} className="rounded-full bg-gray-200/50 hover:bg-green-200/80 filter backdrop-blur-3xl p-[5px] text-gray-700 hover:text-green-800">
+                  <button
+                    onClick={handleAddTodo}
+                    className="rounded-full bg-gray-200/50 hover:bg-green-200/80 filter backdrop-blur-3xl p-[5px] text-gray-700 hover:text-green-800"
+                  >
                     <PlusIcon className="size-[22px]" />
                   </button>
                 </h2>

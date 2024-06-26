@@ -1,6 +1,6 @@
 import React from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { getAlertColors } from "@/lib/utils";
+import getAlertColors from "@/lib/utils/get-alert-colors";
 import { EAlertTypes } from "@/types/enums";
 
 interface AlertDismissButton {
