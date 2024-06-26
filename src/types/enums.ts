@@ -4,3 +4,9 @@ export enum EAlertTypes {
   Info = "info",
   Warning = "warning",
 }
+
+export enum ETaskTypes {
+  Todo = "todo",
+  Doing = "doing",
+  Done = "done",
+}

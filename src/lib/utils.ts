@@ -1,4 +1,6 @@
 export function todoColumnIdToTitle(id: IColumnTypes) {
+import { EAlertTypes, ETaskTypes } from "@/types/enums";
+export function todoColumnIdToTitle(id: ETaskTypes) {
   switch (id) {
     case "todo":
       return "To Do";

@@ -1,8 +1,9 @@
 import { create } from "zustand";
 import { databases, ID, storage } from "@/lib/appwrite";
-import { getColumnFromLocalStorage, setColumnsInLocalStorage } from "@/lib/utils";
+import { ETaskTypes } from "@/types/enums";
 import uploadImage from "@/lib/helpers/uploadImage";
 import getTodosGroupedByType from "@/lib/helpers/getTodosGroupedByType";
+import { getColumnFromLocalStorage, setColumnsInLocalStorage } from "@/lib/utils";
 
 interface BoardState {
   columns: IColumns;
@@ -16,16 +17,16 @@ interface BoardState {
   setImage: (image: File | null) => void;
   newTaskInput: string;
   setNewTaskInput: (newTaskInput: string) => void;
-  newTaskType: IColumnTypes;
-  setNewTaskType: (columnId: IColumnTypes) => void;
+  newTaskType: ETaskTypes;
+  setNewTaskType: (columnId: ETaskTypes) => void;
 
-  addTask: (todo: string, columnId: IColumnTypes, image?: File | null) => void;
-  updateTask: (todo: ITodo, columnId: IColumnTypes) => void;
-  deleteTask: (taskIndex: number, todo: ITodo, id: IColumnTypes) => void;
+  addTask: (todo: string, columnId: ETaskTypes, image?: File | null) => void;
+  updateTask: (todo: ITodo, columnId: ETaskTypes) => void;
+  deleteTask: (taskIndex: number, todo: ITodo, id: ETaskTypes) => void;
 }
 
 export const useBoardStore = create<BoardState>((set, get) => ({
-  columns: new Map<IColumnTypes, IColumn>(getColumnFromLocalStorage()),
+  columns: new Map<ETaskTypes, IColumn>(getColumnFromLocalStorage()),
   setColumns: (columns) => set({ columns }),
 
   searchString: "",
@@ -34,8 +35,8 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   newTaskInput: "",
   setNewTaskInput: (newTaskInput) => set({ newTaskInput }),
 
-  newTaskType: "todo",
-  setNewTaskType: (columnId: IColumnTypes) => set({ newTaskType: columnId }),
+  newTaskType: ETaskTypes.Todo,
+  setNewTaskType: (columnId: ETaskTypes) => set({ newTaskType: columnId }),
 
   image: null,
   setImage: (image: File | null) => set({ image }),

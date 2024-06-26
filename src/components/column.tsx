@@ -1,16 +1,15 @@
 "use client";
 
 import { Draggable, Droppable } from "@hello-pangea/dnd";
-import { PlusCircleIcon } from "@heroicons/react/24/solid";
-import { todoColumnIdToTitle } from "@/lib/utils";
+import { PlusIcon } from "@heroicons/react/24/outline";
 import TodoCard from "@/components/todo-card";
 import { useBoardStore } from "@/store/board-store";
-import { debounce } from "next/dist/server/utils";
 import { useModalStore } from "@/store/modal-store";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import { todoColumnIdToTitle } from "@/lib/utils";
+import { ETaskTypes } from "@/types/enums";
 
 interface ColumnProps {
-  id: IColumnTypes;
+  id: ETaskTypes;
   todos: ITodo[];
   index: number;
 }

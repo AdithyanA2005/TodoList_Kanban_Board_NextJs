@@ -1,4 +1,5 @@
-type IColumnTypes = "todo" | "doing" | "done";
+import { ETaskTypes } from "@/types/enums";
+
 
 interface IImage {
   bucketId: string;
@@ -10,16 +11,16 @@ interface ITodo {
   $createdAt: string;
   $updatedAt: string;
   title: string;
-  status: IColumnTypes;
+  status: ETaskTypes;
   image?: `${IImage}`;
 }
 
 interface IColumn {
-  id: IColumnTypes;
+  id: ETaskTypes;
   todos: ITodo[];
 }
 
-type IColumns = Map<IColumnTypes, IColumn>;
+type IColumns = Map<ETaskTypes, IColumn>;
 
 declare namespace NodeJS {
   interface ProcessEnv {

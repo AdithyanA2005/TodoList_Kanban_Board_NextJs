@@ -1,4 +1,5 @@
 import { databases } from "@/lib/appwrite";
+import { ETaskTypes } from "@/types/enums";
 
 export default async function getTodosGroupedByType(): Promise<IColumns> {
   const data = await databases.listDocuments(
@@ -27,10 +28,10 @@ export default async function getTodosGroupedByType(): Promise<IColumns> {
     });
 
     return acc;
-  }, new Map<IColumnTypes, IColumn>());
+  }, new Map<ETaskTypes, IColumn>());
 
   // Ensure that all columns exist even if they are empty
-  const columnTypes: IColumnTypes[] = ["todo", "doing", "done"];
+  const columnTypes: ETaskTypes[] = Object.values(ETaskTypes);
   for (const columnType of columnTypes) {
     if (!columns.get(columnType)) {
       columns.set(columnType, {

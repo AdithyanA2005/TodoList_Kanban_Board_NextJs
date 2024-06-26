@@ -7,6 +7,7 @@ import {
 } from "@hello-pangea/dnd";
 import { useBoardStore } from "@/store/board-store";
 import getUrl from "@/lib/helpers/getUrl";
+import { ETaskTypes } from "@/types/enums";
 
 export default function TodoCard({
   todo,
@@ -18,7 +19,7 @@ export default function TodoCard({
 }: {
   todo: ITodo;
   index: number;
-  id: IColumnTypes;
+  id: ETaskTypes;
   innerRef: (element: HTMLElement | null) => void;
   draggableProps: DraggableProvidedDraggableProps;
   dragHandleProps: DraggableProvidedDragHandleProps | null | undefined;
