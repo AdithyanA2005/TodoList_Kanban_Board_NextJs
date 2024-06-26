@@ -1,5 +1,7 @@
+import encryptString from "@/lib/utils/encrypt-string";
 import { ELocalStorageKeys } from "@/types/enums";
 
 export default function deleteUserFromLocalStorage() {
-  localStorage.removeItem(ELocalStorageKeys.USER);
+  const encryptedKey = encryptString(ELocalStorageKeys.USER);
+  localStorage.removeItem(encryptedKey);
 }
