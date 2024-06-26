@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { databases, ID, storage } from "@/lib/appwrite";
-import uploadImage from "@/lib/utils/uploadImage";
-import getTodosGroupedByType from "@/lib/utils/getTodosGroupedByType";
+import uploadImage from "@/lib/appwrite/uploadImage";
+import getTodosGroupedByType from "@/lib/appwrite/getTodosGroupedByType";
 import getColumnFromLocalStorage from "@/lib/utils/localStorage/get-columns-from-local-storage";
 import setColumnsInLocalStorage from "@/lib/utils/localStorage/set-columns-in-local-storage";
 import { ETaskTypes } from "@/types/enums";

@@ -5,7 +5,7 @@ import {
   DraggableProvidedDraggableProps,
   DraggableProvidedDragHandleProps,
 } from "@hello-pangea/dnd";
-import getUrl from "@/lib/utils/getUrl";
+import getImageUrl from "@/lib/appwrite/getImageUrl";
 import { useBoardStore } from "@/lib/store/board-store";
 import { ETaskTypes } from "@/types/enums";
 import { ITodo } from "@/types/models/task";
@@ -32,7 +32,7 @@ export default function TodoCard({
     // For todos with image this will get the image url
     if (todo.image) {
       (async () => {
-        const url = await getUrl(JSON.parse(todo.image!));
+        const url = await getImageUrl(JSON.parse(todo.image!));
         if (url) setImageUrl(url.toString());
       })();
     }
