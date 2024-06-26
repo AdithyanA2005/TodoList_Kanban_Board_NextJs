@@ -3,14 +3,13 @@
 import { useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import Column from "@/components/column";
-import getColumnFromLocalStorage from "@/lib/utils/localStorage/get-columns-from-local-storage";
 import { useBoardStore } from "@/lib/store/board-store";
 import { IColumn } from "@/types/models/column";
 
 export default function Board() {
   const { columns, setColumns, fetchColumns, updateTask } = useBoardStore();
 
-  const handleDragEnd = (result: DropResult) => {
+  const handleColumnDragEnd = (result: DropResult) => {
     const { destination, source, type } = result;
 
     // Check if the user dragged the card outside of board
@@ -82,16 +81,14 @@ export default function Board() {
   };
 
   useEffect(() => {
-    // Initially fetch the columns from the local storage
-    const storedColumns = getColumnFromLocalStorage();
-    setColumns(storedColumns);
-
-    // Asynchronously Fetch the columns from the server
+    // Fetch latest columns from the db
+    // Set it to columns state
+    // Also set it in local storage for future fast load
     fetchColumns();
-  }, [fetchColumns, setColumns]);
+  }, [fetchColumns]);
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
+    <DragDropContext onDragEnd={handleColumnDragEnd}>
       <Droppable droppableId="board" direction="horizontal" type="column">
         {(provided) => (
           <div

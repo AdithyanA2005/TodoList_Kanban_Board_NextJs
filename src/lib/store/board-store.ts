@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { databases, ID, storage } from "@/lib/appwrite";
 import uploadImage from "@/lib/utils/uploadImage";
 import getTodosGroupedByType from "@/lib/utils/getTodosGroupedByType";
+import getColumnFromLocalStorage from "@/lib/utils/localStorage/get-columns-from-local-storage";
 import setColumnsInLocalStorage from "@/lib/utils/localStorage/set-columns-in-local-storage";
 import { ETaskTypes } from "@/types/enums";
 import { IColumns } from "@/types/models/column";
@@ -45,6 +46,13 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   setImage: (image: File | null) => set({ image }),
 
   fetchColumns: async () => {
+    // Use data from local storage on initial load
+    if (get().columns.size === 0) {
+      const stored = getColumnFromLocalStorage();
+      set({ columns: stored });
+    }
+
+    // Fetch latest data from the database
     const columns = await getTodosGroupedByType();
     setColumnsInLocalStorage(columns);
     set({ columns });
