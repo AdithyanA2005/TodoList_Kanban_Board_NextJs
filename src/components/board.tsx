@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { useBoardStore } from "@/store/board-store";
 import Column from "@/components/column";
+import { IColumn } from "@/types/models/column";
 
 export default function Board() {
   const { columns, setColumns, fetchColumns, updateTask } = useBoardStore();

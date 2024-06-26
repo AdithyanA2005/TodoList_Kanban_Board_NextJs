@@ -10,3 +10,8 @@ export enum ETaskTypes {
   Doing = "doing",
   Done = "done",
 }
+
+export enum ELocalStorageKeys {
+  COLUMNS = "columns",
+  USER = "user",
+}

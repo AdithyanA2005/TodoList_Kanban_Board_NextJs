@@ -1,5 +1,6 @@
-export function todoColumnIdToTitle(id: IColumnTypes) {
-import { EAlertTypes, ETaskTypes } from "@/types/enums";
+import { EAlertTypes, ELocalStorageKeys, ETaskTypes } from "@/types/enums";
+import { IColumn, IColumns } from "@/types/models/column";
+
 export function todoColumnIdToTitle(id: ETaskTypes) {
   switch (id) {
     case "todo":
@@ -49,9 +50,11 @@ export function getAlertColors(type: EAlertTypes) {
 // COLUMNS LOCAL STORAGE
 
 export function setColumnsInLocalStorage(columns: IColumns) {
-  localStorage.setItem("columns", JSON.stringify(Array.from(columns.entries())));
+  const stringContent = JSON.stringify(Array.from(columns.entries()));
+  localStorage.setItem(ELocalStorageKeys.COLUMNS, stringContent);
 }
 
 export function getColumnFromLocalStorage(): IColumns {
-  return new Map<IColumnTypes, IColumn>(JSON.parse(localStorage.getItem("columns")!));
+  const storedContent = localStorage.getItem(ELocalStorageKeys.COLUMNS)!;
+  return new Map<ETaskTypes, IColumn>(JSON.parse(storedContent));
 }

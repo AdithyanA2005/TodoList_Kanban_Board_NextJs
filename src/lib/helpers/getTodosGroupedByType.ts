@@ -1,5 +1,6 @@
 import { databases } from "@/lib/appwrite";
 import { ETaskTypes } from "@/types/enums";
+import { IColumn, IColumns } from "@/types/models/column";
 
 export default async function getTodosGroupedByType(): Promise<IColumns> {
   const data = await databases.listDocuments(

@@ -7,6 +7,7 @@ import { useBoardStore } from "@/store/board-store";
 import { useModalStore } from "@/store/modal-store";
 import { todoColumnIdToTitle } from "@/lib/utils";
 import { ETaskTypes } from "@/types/enums";
+import { ITodo } from "@/types/models/task";
 
 interface ColumnProps {
   id: ETaskTypes;

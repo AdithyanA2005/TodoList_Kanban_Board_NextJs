@@ -8,6 +8,7 @@ import {
 import { useBoardStore } from "@/store/board-store";
 import getUrl from "@/lib/helpers/getUrl";
 import { ETaskTypes } from "@/types/enums";
+import { ITodo } from "@/types/models/task";
 
 export default function TodoCard({
   todo,
