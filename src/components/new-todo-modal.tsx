@@ -8,6 +8,7 @@ import { useModalStore } from "@/store/modal-store";
 import { useBoardStore } from "@/store/board-store";
 import FormModalSubmitButton from "@/components/form-modal/form-modal-submit-button";
 import FormModalWrapper from "@/components/form-modal/form-modal-wrapper";
+import FormModalInput from "@/components/form-modal/form-modal-input";
 
 interface ITaskTypeRadio {
   id: string;
@@ -56,25 +57,17 @@ export default function NewTodoModal() {
       onSubmit={handleSubmit}
       onClose={closeNewTodoModal}
     >
-      <TaskInputField />
+      <FormModalInput
+        type="text"
+        value={newTaskInput}
+        onChange={(e) => setNewTaskInput(e.target.value)}
+        placeholder="Enter a task here..."
+        className="mt-2"
+      />
       <TaskTypeRadioGroup />
       <ImageField />
       <FormModalSubmitButton btnText="Add Task" disabled={!newTaskInput} />
     </FormModalWrapper>
-  );
-}
-
-function TaskInputField() {
-  const { newTaskInput, setNewTaskInput } = useBoardStore();
-
-  return (
-    <input
-      type="text"
-      value={newTaskInput}
-      onChange={(e) => setNewTaskInput(e.target.value)}
-      placeholder="Enter a task here..."
-      className="w-full border border-gray-300 rounded-md outline-none p-4 mt-2"
-    />
   );
 }
 

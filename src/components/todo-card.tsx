@@ -64,6 +64,7 @@ export default function TodoCard({
           className="absolute top-2.5 right-2.5 bg-white/30 filter backdrop-blur-3xl p-1 rounded-full ml-5 hidden group-hover:block text-gray-600 hover:text-red-600"
         >
           <XMarkIcon className="size-[20px]" />
+          <span className="sr-only">Close</span>
         </button>
       </div>
     </div>
