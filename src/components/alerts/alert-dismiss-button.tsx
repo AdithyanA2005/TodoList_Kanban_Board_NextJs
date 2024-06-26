@@ -15,7 +15,7 @@ export default function AlertDismissButton({ type, dismiss }: AlertDismissButton
     <button
       type="button"
       style={{ color: colors.text }}
-      className="hidden group-hover:flex absolute top-2 right-2 rounded-md p-2 hover:bg-black/5 filter backdrop-blur-3xl focus:outline-none focus:ring-2 focus:ring-offset-2"
+      className="hidden group-hover:flex p-2 absolute top-2 right-2 rounded-md hover:bg-black/5 filter backdrop-blur-3xl focus:outline-none focus:ring-2 focus:ring-offset-2"
       onClick={dismiss}
     >
       <XMarkIcon className="size-[20px]" />

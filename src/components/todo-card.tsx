@@ -5,6 +5,7 @@ import {
   DraggableProvidedDraggableProps,
   DraggableProvidedDragHandleProps,
 } from "@hello-pangea/dnd";
+import cn from "@/lib/utils/cn";
 import getImageUrl from "@/lib/appwrite/getImageUrl";
 import { useBoardStore } from "@/lib/store/board-store";
 import { ETaskTypes } from "@/types/enums";
@@ -61,7 +62,13 @@ export default function TodoCard({
         <p>{todo.title}</p>
         <button
           onClick={() => deleteTask(index, todo, id)}
-          className="absolute top-2.5 right-2.5 bg-white/30 filter backdrop-blur-3xl p-1 rounded-full ml-5 hidden group-hover:block text-gray-600 hover:text-red-600"
+          className={cn(
+            "hidden group-hover:block",
+            "absolute top-2.5 right-2.5",
+            "p-1 ml-5 rounded-full",
+            "text-gray-600 hover:text-red-600",
+            "filter backdrop-blur-3xl bg-white/30",
+          )}
         >
           <XMarkIcon className="size-[20px]" />
           <span className="sr-only">Close</span>

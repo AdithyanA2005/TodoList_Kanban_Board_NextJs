@@ -4,11 +4,12 @@ import { FormEvent, useRef } from "react";
 import Image from "next/image";
 import { Radio, RadioGroup } from "@headlessui/react";
 import { CheckCircleIcon, PhotoIcon } from "@heroicons/react/24/solid";
-import { useModalStore } from "@/lib/store/modal-store";
-import { useBoardStore } from "@/lib/store/board-store";
 import FormModalSubmitButton from "@/components/form-modal/form-modal-submit-button";
 import FormModalWrapper from "@/components/form-modal/form-modal-wrapper";
 import FormModalInput from "@/components/form-modal/form-modal-input";
+import cn from "@/lib/utils/cn";
+import { useModalStore } from "@/lib/store/modal-store";
+import { useBoardStore } from "@/lib/store/board-store";
 import { useAlertStore } from "@/lib/store/alert.stote";
 import { EAlertTypes } from "@/types/enums";
 
@@ -16,7 +17,7 @@ interface ITaskTypeRadio {
   id: string;
   name: string;
   description: string;
-  color: string;
+  bgColorClass: string;
 }
 
 const types: ITaskTypeRadio[] = [
@@ -24,19 +25,19 @@ const types: ITaskTypeRadio[] = [
     id: "todo",
     name: "Todo",
     description: "A new task to be completed",
-    color: "bg-red-500",
+    bgColorClass: "bg-red-500",
   },
   {
     id: "doing",
     name: "In Progress",
     description: "A task that is currently being worked on",
-    color: "bg-yellow-500",
+    bgColorClass: "bg-yellow-500",
   },
   {
     id: "done",
     name: "Done",
     description: "A task that has been completed",
-    color: "bg-green-500",
+    bgColorClass: "bg-green-500",
   },
 ];
 
@@ -101,20 +102,20 @@ function TaskTypeRadioGroup() {
               key={type.id}
               value={type.id}
               className={({ focus, checked }) =>
-                `
-                  ${focus ? "ring-2 ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-300" : ""}
-                  ${checked ? `${type.color} bg-opacity-75 text-white` : "bg-white"}
-                  relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none
-                `
+                cn(
+                  "relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none",
+                  focus && "ring-2 ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-300",
+                  checked ? `${type.bgColorClass} bg-opacity-75 text-white` : "bg-white",
+                )
               }
             >
               {({ focus, checked }) => (
                 <div className="flex w-full items-center justify-between">
                   <div className="text-sm/6">
-                    <p className={` ${checked ? "text-white" : "text-gray-900"} font-semibold`}>
+                    <p className={cn("font-semibold", checked ? "text-white" : "text-gray-900")}>
                       {type.name}
                     </p>
-                    <div className={`${checked ? "text-white" : "text-gray-500"} inline`}>
+                    <div className={cn("inline", checked ? "text-white" : "text-gray-500")}>
                       {type.description}
                     </div>
                   </div>
@@ -141,7 +142,11 @@ function ImageField() {
           alt="Uploaded Image"
           width={200}
           height={200}
-          className="w-full h-fit object-cover filter hover:grayscale transition-all duration-150 cursor-not-allowed rounded-[inherit]"
+          className={cn(
+            "cursor-not-allowed",
+            "object-cover w-full h-fit rounded-[inherit]",
+            "filter hover:grayscale transition-all duration-150",
+          )}
           src={URL.createObjectURL(image)}
           onClick={() => setImage(null)}
         />
@@ -149,7 +154,10 @@ function ImageField() {
         <button
           type="button"
           onClick={() => imagePickerRef.current?.click()}
-          className="w-full outline-none p-5 min-h-28 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+          className={cn(
+            "p-5 w-full min-h-28",
+            "outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
+          )}
         >
           <PhotoIcon className="h-6 w-6 mr-2 inline-block" />
           Upload Image

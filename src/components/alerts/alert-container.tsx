@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Transition } from "@headlessui/react";
-import clsx from "clsx";
 import getAlertColors from "@/lib/utils/get-alert-colors";
+import cn from "@/lib/utils/cn";
 import { EAlertTypes } from "@/types/enums";
 
 interface AlertContainerProps {
@@ -61,13 +61,13 @@ export default function AlertContainer({ type, open, dismiss, children }: AlertC
       <div
         ref={alertRef}
         style={{ backgroundColor: colors.bg, borderColor: colors.border }}
-        className={clsx([
+        className={cn(
           "group relative flex items-start rounded-md border p-4",
           "cursor-grab sm:cursor-default active:cursor-grabbing select-none",
           "transition ease-in-out data-[closed]:opacity-0 data-[closed]:translate-x-full",
           "data-[enter]:duration-200",
           "data-[leave]:duration-500",
-        ])}
+        )}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
