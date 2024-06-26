@@ -5,15 +5,56 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import FormModalInput from "@/components/form-modal/form-modal-input";
 import FormModalWrapper from "@/components/form-modal/form-modal-wrapper";
 import FormModalSubmitButton from "@/components/form-modal/form-modal-submit-button";
-import cn from "@/lib/utils/cn";
 import { useModalStore } from "@/lib/store/modal.store";
+import { useFormStore } from "@/lib/store/form.store";
+import { useAlertStore } from "@/lib/store/alert.stote";
+import joinWithAnd from "@/lib/utils/localStorage/join-with-and";
+import cn from "@/lib/utils/cn";
+import { EAlertTypes } from "@/types/enums";
+
+enum ETabs {
+  Login = 0,
+  Register = 1,
+}
 
 export default function AuthModal() {
+  const [selectedIndex, setSelectedIndex] = useState<ETabs>(0);
+  const { newAlert } = useAlertStore();
   const { authIsOpen, closeAuthModal } = useModalStore();
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const { authValues, setAuthValues, resetAuthValues } = useFormStore();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const { name, email, password } = authValues;
+
+    // Find all missing fields
+    const missingFields: string[] = [];
+    if (selectedIndex === ETabs.Register && !name) missingFields.push("name"); // Field "name" is only present in registration tab
+    if (!email) missingFields.push("email");
+    if (!password) missingFields.push("password");
+
+    // Show alert and STOP if missing fields
+    if (missingFields.length > 0) {
+      newAlert(
+        {
+          title: `Required ${missingFields.length > 1 ? "fields are" : "field is"} missing`,
+          message: `Please try again after entering your ${joinWithAnd(missingFields)}.`,
+          type: EAlertTypes.Error,
+        },
+        5000,
+      );
+      return;
+    }
+
+    switch (selectedIndex) {
+      case ETabs.Login:
+      // TODO: Add Login
+      case ETabs.Register:
+      // TODO: Add Registration
+    }
+
+    resetAuthValues();
+    closeAuthModal();
   };
 
   return (
@@ -30,23 +71,48 @@ export default function AuthModal() {
         </TabList>
         <TabPanels className="mt-2">
           <TabPanel className="space-y-2">
-            <FormModalInput type="email" placeholder="Email" value={""} onChange={() => {}} />
-            <FormModalInput type="password" placeholder="Password" value={""} onChange={() => {}} />
+            <FormModalInput
+              type="email"
+              placeholder="Email"
+              value={authValues.email}
+              onChange={(e) => setAuthValues({ ...authValues, email: e.target.value })}
+            />
+            <FormModalInput
+              type="password"
+              placeholder="Password"
+              value={authValues.password}
+              onChange={(e) => setAuthValues({ ...authValues, password: e.target.value })}
+            />
             <AlternateAction
               text="Don't have an account?"
               actionText="Register"
-              action={() => setSelectedIndex(1)}
+              action={() => setSelectedIndex(ETabs.Register)}
             />
           </TabPanel>
 
           <TabPanel className="space-y-2">
-            <FormModalInput type="text" placeholder="Name" value={""} onChange={() => {}} />
-            <FormModalInput type="email" placeholder="Email" value={""} onChange={() => {}} />
-            <FormModalInput type="password" placeholder="Password" value={""} onChange={() => {}} />
+            <FormModalInput
+              type="text"
+              placeholder="Name"
+              value={authValues.name}
+              onChange={(e) => setAuthValues({ ...authValues, name: e.target.value })}
+            />
+            <FormModalInput
+              type="email"
+              placeholder="Email"
+              value={authValues.email}
+              onChange={(e) => setAuthValues({ ...authValues, email: e.target.value })}
+            />
+            <FormModalInput
+              type="password"
+              placeholder="Password"
+              value={authValues.password}
+              onChange={(e) => setAuthValues({ ...authValues, password: e.target.value })}
+            />
             <AlternateAction
               text="Already have an account?"
               actionText="Sign In"
-              action={() => setSelectedIndex(0)}
+              action={() => setSelectedIndex(ETabs.Login)}
             />
           </TabPanel>
         </TabPanels>
