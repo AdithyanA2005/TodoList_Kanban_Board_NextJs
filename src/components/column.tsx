@@ -3,8 +3,8 @@
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import TodoCard from "@/components/todo-card";
-import { useBoardStore } from "@/store/board-store";
-import { useModalStore } from "@/store/modal-store";
+import { useBoardStore } from "@/lib/store/board-store";
+import { useModalStore } from "@/lib/store/modal-store";
 import { todoColumnIdToTitle } from "@/lib/utils";
 import { ETaskTypes } from "@/types/enums";
 import { ITodo } from "@/types/models/task";

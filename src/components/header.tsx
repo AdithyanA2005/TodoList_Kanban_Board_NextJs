@@ -4,6 +4,8 @@ import Avatar from "react-avatar";
 import { CheckCircleIcon, MagnifyingGlassIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { useBoardStore } from "@/store/board-store";
 import { ChangeEventHandler } from "react";
+import { CheckCircleIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { useBoardStore } from "@/lib/store/board-store";
 
 export default function Header() {
   return (

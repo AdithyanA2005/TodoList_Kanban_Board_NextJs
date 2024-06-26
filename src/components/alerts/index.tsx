@@ -5,7 +5,7 @@ import AlertContainer from "@/components/alerts/alert-container";
 import AlertIcon from "@/components/alerts/alert-icon";
 import AlertContent from "@/components/alerts/alert-content";
 import AlertDismissButton from "@/components/alerts/alert-dismiss-button";
-import { useAlertStore } from "@/store/alert.stote";
+import { useAlertStore } from "@/lib/store/alert.stote";
 
 export default function Index() {
   const { alerts, closeAlert, clearAlerts } = useAlertStore();

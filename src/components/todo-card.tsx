@@ -6,7 +6,7 @@ import {
   DraggableProvidedDragHandleProps,
 } from "@hello-pangea/dnd";
 import getUrl from "@/lib/utils/getUrl";
-import { useBoardStore } from "@/store/board-store";
+import { useBoardStore } from "@/lib/store/board-store";
 import { ETaskTypes } from "@/types/enums";
 import { ITodo } from "@/types/models/task";
 
