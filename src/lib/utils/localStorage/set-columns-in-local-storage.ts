@@ -4,7 +4,6 @@ import { ELocalStorageKeys } from "@/types/enums";
 
 export default function setColumnsInLocalStorage(columns: IColumns) {
   const stringContent = JSON.stringify(Array.from(columns.entries()));
-  const encryptedKey = encryptString(ELocalStorageKeys.COLUMNS);
-  const encryptedValue = encryptString(stringContent);
-  localStorage.setItem(encryptedKey, encryptedValue);
+  const encryptedString = encryptString(stringContent);
+  localStorage.setItem(ELocalStorageKeys.COLUMNS, encryptedString);
 }
