@@ -1,5 +1,4 @@
-import { EAlertTypes, ELocalStorageKeys, ETaskTypes } from "@/types/enums";
-import { IColumn, IColumns } from "@/types/models/column";
+import { EAlertTypes, ETaskTypes } from "@/types/enums";
 
 export function todoColumnIdToTitle(id: ETaskTypes) {
   switch (id) {
@@ -47,14 +46,3 @@ export function getAlertColors(type: EAlertTypes) {
   }
 }
 
-// COLUMNS LOCAL STORAGE
-
-export function setColumnsInLocalStorage(columns: IColumns) {
-  const stringContent = JSON.stringify(Array.from(columns.entries()));
-  localStorage.setItem(ELocalStorageKeys.COLUMNS, stringContent);
-}
-
-export function getColumnFromLocalStorage(): IColumns {
-  const storedContent = localStorage.getItem(ELocalStorageKeys.COLUMNS)!;
-  return new Map<ETaskTypes, IColumn>(JSON.parse(storedContent));
-}

@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { databases, ID, storage } from "@/lib/appwrite";
 import uploadImage from "@/lib/utils/uploadImage";
 import getTodosGroupedByType from "@/lib/utils/getTodosGroupedByType";
-import { setColumnsInLocalStorage } from "@/lib/utils";
+import setColumnsInLocalStorage from "@/lib/utils/localStorage/set-columns-in-local-storage";
 import { ETaskTypes } from "@/types/enums";
 import { IColumns } from "@/types/models/column";
 import { ITodo } from "@/types/models/task";
