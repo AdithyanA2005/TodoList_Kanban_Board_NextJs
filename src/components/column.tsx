@@ -4,7 +4,7 @@ import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import TodoCard from "@/components/todo-card";
 import getColumnDisplayName from "@/lib/utils/get-column-display-name";
-import { useBoardStore } from "@/lib/store/board.store";
+import { useFormStore } from "@/lib/store/form.store";
 import { useModalStore } from "@/lib/store/modal.store";
 import { ETaskTypes } from "@/types/enums";
 import { ITodo } from "@/types/models/task";
@@ -16,7 +16,8 @@ interface ColumnProps {
 }
 
 export default function Column({ id, todos, index }: ColumnProps) {
-  const { searchString, setSearchString, setNewTaskType } = useBoardStore();
+  const { searchValue, setSearchValue } = useFormStore();
+  const { newTodoValues, setNewTodoValues } = useFormStore();
   const { openNewTodoModal } = useModalStore();
 
   const searchCheck = (query: string, value: string): boolean => {
@@ -25,7 +26,7 @@ export default function Column({ id, todos, index }: ColumnProps) {
     return value.toLowerCase().includes(query.toLowerCase());
   };
   const handleAddTodo = () => {
-    setNewTaskType(id); // Select the radio according to column id(todo, doing, done)
+    setNewTodoValues({ ...newTodoValues, type: id });
     openNewTodoModal();
   };
 
@@ -44,9 +45,9 @@ export default function Column({ id, todos, index }: ColumnProps) {
                   <div className="flex items-center gap-1">
                     <span>{getColumnDisplayName(id)}</span>
                     <span className="h-7 aspect-square text-gray-500 bg-gray-200 rounded-full px-2 py-1 font-mono text-xs flex justify-center items-center">
-                      {!searchString
+                      {!searchValue
                         ? todos.length
-                        : todos.filter((todo) => searchCheck(searchString, todo.title)).length}
+                        : todos.filter((todo) => searchCheck(searchValue, todo.title)).length}
                     </span>
                   </div>
 
@@ -60,7 +61,7 @@ export default function Column({ id, todos, index }: ColumnProps) {
 
                 <div className="space-y-2">
                   {todos.map((todo, index) => {
-                    if (!searchCheck(searchString, todo.title)) return null;
+                    if (!searchCheck(searchValue, todo.title)) return null;
 
                     return (
                       <Draggable key={index} draggableId={todo.$id} index={index}>

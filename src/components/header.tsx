@@ -2,9 +2,9 @@
 
 import Avatar from "react-avatar";
 import { CheckCircleIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { useBoardStore } from "@/lib/store/board.store";
 import { useAuthStore } from "@/lib/store/auth.store";
 import { useModalStore } from "@/lib/store/modal.store";
+import { useFormStore } from "@/lib/store/form.store";
 
 export default function Header() {
   const { user } = useAuthStore();
@@ -33,7 +33,7 @@ function Logo() {
 }
 
 function SearchBox() {
-  const { searchString, setSearchString } = useBoardStore();
+  const { searchValue, setSearchValue } = useFormStore();
 
   return (
     <form className="flex-1 md:flex-initial flex items-center space-x-2 rounded-md p-2.5 shadow-md bg-white">
@@ -42,8 +42,8 @@ function SearchBox() {
       <input
         type="text"
         placeholder="Search"
-        value={searchString}
-        onChange={(e) => setSearchString(e.target.value)}
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
         className="flex-1 outline-none"
       />
 

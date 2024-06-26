@@ -11,46 +11,28 @@ import cn from "@/lib/utils/cn";
 import { useModalStore } from "@/lib/store/modal.store";
 import { useBoardStore } from "@/lib/store/board.store";
 import { useAlertStore } from "@/lib/store/alert.stote";
-import { EAlertTypes } from "@/types/enums";
-
-interface ITaskTypeRadio {
-  id: string;
-  name: string;
-  description: string;
-  bgColorClass: string;
-}
-
-const types: ITaskTypeRadio[] = [
-  {
-    id: "todo",
-    name: "Todo",
-    description: "A new task to be completed",
-    bgColorClass: "bg-red-500",
-  },
-  {
-    id: "doing",
-    name: "In Progress",
-    description: "A task that is currently being worked on",
-    bgColorClass: "bg-yellow-500",
-  },
-  {
-    id: "done",
-    name: "Done",
-    description: "A task that has been completed",
-    bgColorClass: "bg-green-500",
-  },
-];
+import { useFormStore } from "@/lib/store/form.store";
+import { EAlertTypes, ETaskTypes } from "@/types/enums";
 
 export default function NewTodoModal() {
   const { newAlert } = useAlertStore();
+  const { addTask } = useBoardStore();
   const { newTodoIsOpen, closeNewTodoModal } = useModalStore();
-  const { newTaskType, newTaskInput, setNewTaskInput, image, setImage, addTask } = useBoardStore();
+  const { newTodoValues, setNewTodoValues, resetNewTodoValues } = useFormStore();
+
+  const { title, image, type } = newTodoValues;
+  const setTitle = (title: string) => setNewTodoValues({ ...newTodoValues, title });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Display an alert if the task title is empty
-    if (!newTaskInput) {
+    // Add the task to the board if title is not empty
+    if (title) {
+      addTask(title, type, image);
+      resetNewTodoValues();
+      closeNewTodoModal();
+    } else {
+      // Display an alert if the task title is empty
       newAlert(
         {
           title: "Task title is required",
@@ -59,14 +41,7 @@ export default function NewTodoModal() {
         },
         5000,
       );
-
-      return;
     }
-
-    // Add the task to the board if title is not empty
-    addTask(newTaskInput, newTaskType, image);
-    setImage(null);
-    closeNewTodoModal();
   };
 
   return (
@@ -78,26 +53,56 @@ export default function NewTodoModal() {
     >
       <FormModalInput
         type="text"
-        value={newTaskInput}
-        onChange={(e) => setNewTaskInput(e.target.value)}
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
         placeholder="Enter a task title..."
         className="mt-2"
       />
       <TaskTypeRadioGroup />
       <ImageField />
-      <FormModalSubmitButton btnText="Add Task" disabled={!newTaskInput} />
+      <FormModalSubmitButton btnText="Add Task" disabled={!title} />
     </FormModalWrapper>
   );
 }
 
+interface ITaskTypeRadio {
+  id: ETaskTypes;
+  name: string;
+  description: string;
+  bgColorClass: string;
+}
+
 function TaskTypeRadioGroup() {
-  const { newTaskType, setNewTaskType } = useBoardStore();
+  const { newTodoValues, setNewTodoValues } = useFormStore();
+  const typeOptions: ITaskTypeRadio[] = [
+    {
+      id: ETaskTypes.Todo,
+      name: "Todo",
+      description: "A new task to be completed",
+      bgColorClass: "bg-red-500",
+    },
+    {
+      id: ETaskTypes.Doing,
+      name: "In Progress",
+      description: "A task that is currently being worked on",
+      bgColorClass: "bg-yellow-500",
+    },
+    {
+      id: ETaskTypes.Done,
+      name: "Done",
+      description: "A task that has been completed",
+      bgColorClass: "bg-green-500",
+    },
+  ];
+
+  const { type } = newTodoValues;
+  const setType = (type: ETaskTypes) => setNewTodoValues({ ...newTodoValues, type });
 
   return (
     <div className="w-full py-5">
       <div className="mx-auto w-full max-w-md">
-        <RadioGroup value={newTaskType} onChange={(e) => setNewTaskType(e)} className="space-y-2">
-          {types.map((type) => (
+        <RadioGroup value={type} onChange={setType} className="space-y-2">
+          {typeOptions.map((type) => (
             <Radio
               key={type.id}
               value={type.id}
@@ -132,8 +137,11 @@ function TaskTypeRadioGroup() {
 }
 
 function ImageField() {
-  const { image, setImage, addTask } = useBoardStore();
   const imagePickerRef = useRef<HTMLInputElement>(null);
+  const { newTodoValues, setNewTodoValues } = useFormStore();
+
+  const { image } = newTodoValues;
+  const setImage = (image: File | null) => setNewTodoValues({ ...newTodoValues, image });
 
   return (
     <div className="border border-gray-300 rounded-md">

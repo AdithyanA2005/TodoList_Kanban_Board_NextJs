@@ -15,16 +15,6 @@ interface BoardState {
   setColumns: (columns: IColumns) => void;
   fetchColumns: () => void;
 
-  searchString: string;
-  setSearchString: (searchString: string) => void;
-
-  image: File | null;
-  setImage: (image: File | null) => void;
-  newTaskInput: string;
-  setNewTaskInput: (newTaskInput: string) => void;
-  newTaskType: ETaskTypes;
-  setNewTaskType: (columnId: ETaskTypes) => void;
-
   addTask: (todo: string, columnId: ETaskTypes, image?: File | null) => void;
   updateTask: (todo: ITodo, columnId: ETaskTypes) => void;
   deleteTask: (taskIndex: number, todo: ITodo, id: ETaskTypes) => void;
@@ -33,18 +23,6 @@ interface BoardState {
 export const useBoardStore = create<BoardState>((set, get) => ({
   columns: new Map(),
   setColumns: (columns) => set({ columns }),
-
-  searchString: "",
-  setSearchString: (searchString) => set({ searchString }),
-
-  newTaskInput: "",
-  setNewTaskInput: (newTaskInput) => set({ newTaskInput }),
-
-  newTaskType: ETaskTypes.Todo,
-  setNewTaskType: (columnId: ETaskTypes) => set({ newTaskType: columnId }),
-
-  image: null,
-  setImage: (image: File | null) => set({ image }),
 
   fetchColumns: async () => {
     // Use data from local storage on initial load
@@ -86,9 +64,6 @@ export const useBoardStore = create<BoardState>((set, get) => ({
         ...(file ? { image: JSON.stringify(file) } : {}),
       },
     );
-
-    // Clear the modal input for next fresh start
-    set({ newTaskInput: "" });
 
     // Change the state by adding the newly created record
     set((state) => {
