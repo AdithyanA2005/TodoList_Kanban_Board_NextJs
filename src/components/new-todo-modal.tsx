@@ -8,8 +8,8 @@ import FormModalSubmitButton from "@/components/form-modal/form-modal-submit-but
 import FormModalWrapper from "@/components/form-modal/form-modal-wrapper";
 import FormModalInput from "@/components/form-modal/form-modal-input";
 import cn from "@/lib/utils/cn";
-import { useModalStore } from "@/lib/store/modal-store";
-import { useBoardStore } from "@/lib/store/board-store";
+import { useModalStore } from "@/lib/store/modal.store";
+import { useBoardStore } from "@/lib/store/board.store";
 import { useAlertStore } from "@/lib/store/alert.stote";
 import { EAlertTypes } from "@/types/enums";
 

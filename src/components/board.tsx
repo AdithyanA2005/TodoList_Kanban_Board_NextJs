@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import Column from "@/components/column";
-import { useBoardStore } from "@/lib/store/board-store";
+import { useBoardStore } from "@/lib/store/board.store";
 import { IColumn } from "@/types/models/column";
 
 export default function Board() {

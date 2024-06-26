@@ -4,8 +4,8 @@ import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import TodoCard from "@/components/todo-card";
 import getColumnDisplayName from "@/lib/utils/get-column-display-name";
-import { useBoardStore } from "@/lib/store/board-store";
-import { useModalStore } from "@/lib/store/modal-store";
+import { useBoardStore } from "@/lib/store/board.store";
+import { useModalStore } from "@/lib/store/modal.store";
 import { ETaskTypes } from "@/types/enums";
 import { ITodo } from "@/types/models/task";
 

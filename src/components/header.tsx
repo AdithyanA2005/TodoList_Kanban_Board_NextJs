@@ -2,9 +2,9 @@
 
 import Avatar from "react-avatar";
 import { CheckCircleIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { useBoardStore } from "@/lib/store/board-store";
+import { useBoardStore } from "@/lib/store/board.store";
 import { useAuthStore } from "@/lib/store/auth.store";
-import { useModalStore } from "@/lib/store/modal-store";
+import { useModalStore } from "@/lib/store/modal.store";
 
 export default function Header() {
   const { user } = useAuthStore();

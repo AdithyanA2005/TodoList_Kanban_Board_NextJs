@@ -6,7 +6,7 @@ import FormModalInput from "@/components/form-modal/form-modal-input";
 import FormModalWrapper from "@/components/form-modal/form-modal-wrapper";
 import FormModalSubmitButton from "@/components/form-modal/form-modal-submit-button";
 import cn from "@/lib/utils/cn";
-import { useModalStore } from "@/lib/store/modal-store";
+import { useModalStore } from "@/lib/store/modal.store";
 
 export default function AuthModal() {
   const { authIsOpen, closeAuthModal } = useModalStore();

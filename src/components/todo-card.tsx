@@ -7,7 +7,7 @@ import {
 } from "@hello-pangea/dnd";
 import cn from "@/lib/utils/cn";
 import getImageUrl from "@/lib/appwrite/getImageUrl";
-import { useBoardStore } from "@/lib/store/board-store";
+import { useBoardStore } from "@/lib/store/board.store";
 import { ETaskTypes } from "@/types/enums";
 import { ITodo } from "@/types/models/task";
 
