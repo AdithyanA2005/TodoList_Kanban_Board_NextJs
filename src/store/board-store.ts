@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { databases, ID, storage } from "@/lib/appwrite";
 import uploadImage from "@/lib/helpers/uploadImage";
 import getTodosGroupedByType from "@/lib/helpers/getTodosGroupedByType";
-import { getColumnFromLocalStorage, setColumnsInLocalStorage } from "@/lib/utils";
+import { setColumnsInLocalStorage } from "@/lib/utils";
 import { ETaskTypes } from "@/types/enums";
 import { IColumns } from "@/types/models/column";
 import { ITodo } from "@/types/models/task";
@@ -29,7 +29,7 @@ interface BoardState {
 }
 
 export const useBoardStore = create<BoardState>((set, get) => ({
-  columns: new Map(getColumnFromLocalStorage()),
+  columns: new Map(),
   setColumns: (columns) => set({ columns }),
 
   searchString: "",
