@@ -27,6 +27,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
         <BgGradient />
         <NewTodoModal />
+        <AuthModal />
         <Alerts />
       </body>
     </html>

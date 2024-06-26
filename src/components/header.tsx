@@ -1,21 +1,22 @@
 "use client";
 
 import Avatar from "react-avatar";
-import { CheckCircleIcon, MagnifyingGlassIcon, UserCircleIcon } from "@heroicons/react/24/solid";
-import { useBoardStore } from "@/store/board-store";
-import { ChangeEventHandler } from "react";
 import { CheckCircleIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { useBoardStore } from "@/lib/store/board-store";
+import { useAuthStore } from "@/lib/store/auth.store";
+import { useModalStore } from "@/lib/store/modal-store";
 
 export default function Header() {
+  const { user } = useAuthStore();
+
   return (
     <header>
-      <div className="flex flex-col md:flex-row items-center py-3 px-5 bg-white/5 filter backdrop-blur-3xl rounded-b-2xl">
+      <div className="flex flex-col md:flex-row items-center py-2.5 px-5 bg-white/5 filter backdrop-blur-3xl rounded-b-2xl">
         <Logo />
 
-        <div className="flex items-center space-x-5 flex-1 justify-end w-full">
+        <div className="flex space-x-4 flex-1 justify-end w-full">
           <SearchBox />
-          <UserDropdown />
+          {user ? <UserDropdown /> : <AuthButton />}
         </div>
       </div>
     </header>
@@ -24,8 +25,8 @@ export default function Header() {
 
 function Logo() {
   return (
-    <h1 className="hover:scale-105 transition rounded-md filter backdrop-blur-3xl py-1 px-2 flex items-center space-x-2 text-2xl font-bold font-mono text-primary">
-      <CheckCircleIcon className="h-10 w-10 text-primary" />
+    <h1 className="transition hover:scale-105 px-2 space-x-2 rounded-md filter backdrop-blur-3xl flex items-center font-bold font-mono text-primary text-2xl">
+      <CheckCircleIcon className="size-8 text-primary" />
       <span>AdisTodo</span>
     </h1>
   );
@@ -35,7 +36,7 @@ function SearchBox() {
   const { searchString, setSearchString } = useBoardStore();
 
   return (
-    <form className="flex items-center space-x-2 bg-white rounded-md p-2 shadow-md flex-1 md:flex-initial">
+    <form className="flex-1 md:flex-initial flex items-center space-x-2 rounded-md p-2.5 shadow-md bg-white">
       <MagnifyingGlassIcon className="h-6 w-6 text-gray-400" />
 
       <input
@@ -43,7 +44,7 @@ function SearchBox() {
         placeholder="Search"
         value={searchString}
         onChange={(e) => setSearchString(e.target.value)}
-        className="flex-1 outline-none p-1"
+        className="flex-1 outline-none"
       />
 
       <button type="submit" hidden>
@@ -59,5 +60,18 @@ function UserDropdown() {
       {/*TODO: Implement a dropdown menu*/}
       <Avatar name="Adithyan A" round color="var(--primary)" size="50" />
     </div>
+  );
+}
+
+function AuthButton() {
+  const { openAuthModal } = useModalStore();
+
+  return (
+    <button
+      onClick={openAuthModal}
+      className="py-2 px-4 rounded-md shadow-md text-white bg-gradient-to-bl from-blue-400 hover:from-blue-500 to-pink-400 hover:to-pink-500"
+    >
+      Login
+    </button>
   );
 }
