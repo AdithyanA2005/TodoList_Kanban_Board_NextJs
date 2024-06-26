@@ -17,7 +17,7 @@ export default function Index() {
   }, [alerts]);
 
   return (
-    <div className="fixed bottom-4 right-2 left-2 sm:right-4 sm:left-auto sm:w-full sm:max-w-md space-y-1.5">
+    <div className="z-20 fixed bottom-4 right-2 left-2 sm:right-4 sm:left-auto sm:w-full sm:max-w-md space-y-1.5">
       {alerts.map((alert) => (
         <AlertContainer key={alert.id} type={alert.type} open={alert.open} dismiss={() => closeAlert(alert.id)}>
           <AlertIcon type={alert.type} />
