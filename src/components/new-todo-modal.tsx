@@ -9,6 +9,8 @@ import { useBoardStore } from "@/lib/store/board-store";
 import FormModalSubmitButton from "@/components/form-modal/form-modal-submit-button";
 import FormModalWrapper from "@/components/form-modal/form-modal-wrapper";
 import FormModalInput from "@/components/form-modal/form-modal-input";
+import { useAlertStore } from "@/lib/store/alert.stote";
+import { EAlertTypes } from "@/types/enums";
 
 interface ITaskTypeRadio {
   id: string;
@@ -39,12 +41,28 @@ const types: ITaskTypeRadio[] = [
 ];
 
 export default function NewTodoModal() {
+  const { newAlert } = useAlertStore();
   const { newTodoIsOpen, closeNewTodoModal } = useModalStore();
   const { newTaskType, newTaskInput, setNewTaskInput, image, setImage, addTask } = useBoardStore();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!newTaskInput) return;
+
+    // Display an alert if the task title is empty
+    if (!newTaskInput) {
+      newAlert(
+        {
+          title: "Task title is required",
+          message: "Please enter title of the task to be added",
+          type: EAlertTypes.Error,
+        },
+        5000,
+      );
+
+      return;
+    }
+
+    // Add the task to the board if title is not empty
     addTask(newTaskInput, newTaskType, image);
     setImage(null);
     closeNewTodoModal();
@@ -61,7 +79,7 @@ export default function NewTodoModal() {
         type="text"
         value={newTaskInput}
         onChange={(e) => setNewTaskInput(e.target.value)}
-        placeholder="Enter a task here..."
+        placeholder="Enter a task title..."
         className="mt-2"
       />
       <TaskTypeRadioGroup />
