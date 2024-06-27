@@ -12,13 +12,15 @@ import { useModalStore } from "@/lib/store/modal.store";
 import { useBoardStore } from "@/lib/store/board.store";
 import { useAlertStore } from "@/lib/store/alert.stote";
 import { useFormStore } from "@/lib/store/form.store";
+import { useAuthStore } from "@/lib/store/auth.store";
 import { EAlertTypes, ETaskTypes } from "@/types/enums";
 
 export default function NewTodoModal() {
   const [submitting, setSubmitting] = useState(false);
 
-  const { newAlert } = useAlertStore();
+  const { user } = useAuthStore();
   const { addTask } = useBoardStore();
+  const { newAlert } = useAlertStore();
   const { newTodoIsOpen, closeNewTodoModal } = useModalStore();
   const { newTodoValues, setNewTodoValues, resetNewTodoValues } = useFormStore();
 
@@ -35,7 +37,7 @@ export default function NewTodoModal() {
     // Add the task to the board if title is not empty
     if (title) {
       setSubmitting(true);
-      await addTask(title, type, image);
+      await addTask(title, type, user ? image : null);
       setSubmitting(false);
 
       resetNewTodoValues();
@@ -68,7 +70,7 @@ export default function NewTodoModal() {
         className="mt-2"
       />
       <TaskTypeRadioGroup />
-      <ImageField />
+      {user ? <ImageField /> : null}
       <FormModalSubmitButton btnText="Add Task" disabled={!title} submitting={submitting} />
     </FormModalWrapper>
   );

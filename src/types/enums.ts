@@ -12,6 +12,7 @@ export enum ETaskTypes {
 }
 
 export enum ELocalStorageKeys {
+  TEMPCOLUMNS = "temp-columns",
   COLUMNS = "columns",
   USER = "user",
 }
