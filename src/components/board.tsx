@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import Column from "@/components/column";
 import { useBoardStore } from "@/lib/store/board.store";
 import { IColumn } from "@/types/models/column";
 
 export default function Board() {
-  const { columns, setColumns, fetchColumns, updateTask } = useBoardStore();
+  const { columns, setColumns, updateTask } = useBoardStore();
 
   const handleColumnDragEnd = (result: DropResult) => {
     const { destination, source, type } = result;
@@ -79,13 +78,6 @@ export default function Board() {
         }
     }
   };
-
-  useEffect(() => {
-    // Fetch latest columns from the db
-    // Set it to columns state
-    // Also set it in local storage for future fast load
-    fetchColumns();
-  }, [fetchColumns]);
 
   return (
     <DragDropContext onDragEnd={handleColumnDragEnd}>
