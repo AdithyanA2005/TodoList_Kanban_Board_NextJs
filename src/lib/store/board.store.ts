@@ -13,6 +13,7 @@ import { IImage } from "@/types/utils/image";
 import { useAlertStore } from "@/lib/store/alert.stote";
 import { Permission, Role } from "appwrite";
 import { useAuthStore } from "@/lib/store/auth.store";
+import sortColumns from "@/lib/utils/sort-columns";
 
 interface BoardState {
   columns: IColumns;
@@ -35,15 +36,18 @@ export const useBoardStore = create<BoardState>((set, get) => ({
 
     try {
       // First get data stored in localStorage
-      const stored = getColumnFromLocalStorage();
-      set({ columns: stored });
+      const storedColumns = getColumnFromLocalStorage();
+      set({ columns: storedColumns });
 
-      // Fetch the latest data from the database
-      const fetchedColumns = await getTodosGroupedByType();
-      const filledColumns = fillWithEmptyColumns(fetchedColumns);
-      // TODO: Sort columns according to the users preference
-      setColumnsInLocalStorage(filledColumns);
-      set({ columns: filledColumns });
+      // Fetch the latest data from the database and format it
+      const order = [ETaskTypes.Todo, ETaskTypes.Doing, ETaskTypes.Done];
+      let newColumns = await getTodosGroupedByType();
+      newColumns = fillWithEmptyColumns(newColumns);
+      newColumns = sortColumns(newColumns, order);
+
+      // Update the state and localStorage with the latest data
+      setColumnsInLocalStorage(newColumns);
+      set({ columns: newColumns });
     } catch (error: any) {
       useAlertStore.getState().newAlert(
         {
