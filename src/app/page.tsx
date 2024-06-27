@@ -6,11 +6,13 @@ import Board from "@/components/board";
 import { useAuthStore } from "@/lib/store/auth.store";
 
 export default function Home() {
-  const { getUser, user } = useAuthStore();
+  const { getUser } = useAuthStore();
 
   useEffect(() => {
-    getUser();
-  }, [getUser]);
+    (async function () {
+      await getUser();
+    })();
+  }, []);
 
   return (
     <main>
