@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useRef } from "react";
+import { FormEvent, useRef, useState } from "react";
 import Image from "next/image";
 import { Radio, RadioGroup } from "@headlessui/react";
 import { CheckCircleIcon, PhotoIcon } from "@heroicons/react/24/solid";
@@ -15,6 +15,8 @@ import { useFormStore } from "@/lib/store/form.store";
 import { EAlertTypes, ETaskTypes } from "@/types/enums";
 
 export default function NewTodoModal() {
+  const [submitting, setSubmitting] = useState(false);
+
   const { newAlert } = useAlertStore();
   const { addTask } = useBoardStore();
   const { newTodoIsOpen, closeNewTodoModal } = useModalStore();
@@ -23,12 +25,19 @@ export default function NewTodoModal() {
   const { title, image, type } = newTodoValues;
   const setTitle = (title: string) => setNewTodoValues({ ...newTodoValues, title });
 
+  const handleClose = () => {
+    resetNewTodoValues();
+    closeNewTodoModal();
+  };
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Add the task to the board if title is not empty
     if (title) {
+      setSubmitting(true);
       await addTask(title, type, image);
+      setSubmitting(false);
+
       resetNewTodoValues();
       closeNewTodoModal();
     } else {
@@ -49,7 +58,7 @@ export default function NewTodoModal() {
       title="Add a Task"
       isOpen={newTodoIsOpen}
       onSubmit={handleSubmit}
-      onClose={closeNewTodoModal}
+      onClose={handleClose}
     >
       <FormModalInput
         type="text"
@@ -60,7 +69,7 @@ export default function NewTodoModal() {
       />
       <TaskTypeRadioGroup />
       <ImageField />
-      <FormModalSubmitButton btnText="Add Task" />
+      <FormModalSubmitButton btnText="Add Task" disabled={!title} submitting={submitting} />
     </FormModalWrapper>
   );
 }
