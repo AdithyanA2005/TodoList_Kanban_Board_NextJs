@@ -1,15 +1,14 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import FormModalInput from "@/components/form-modal/form-modal-input";
 import FormModalWrapper from "@/components/form-modal/form-modal-wrapper";
 import FormModalSubmitButton from "@/components/form-modal/form-modal-submit-button";
 import { useModalStore } from "@/lib/store/modal.store";
 import { useFormStore } from "@/lib/store/form.store";
 import { useAlertStore } from "@/lib/store/alert.stote";
+import { useAuthStore } from "@/lib/store/auth.store";
 import joinWithAnd from "@/lib/utils/localStorage/join-with-and";
-import cn from "@/lib/utils/cn";
 import { EAlertTypes } from "@/types/enums";
 
 enum ETabs {
@@ -18,18 +17,25 @@ enum ETabs {
 }
 
 export default function AuthModal() {
-  const [selectedIndex, setSelectedIndex] = useState<ETabs>(0);
+  const [tab, setTab] = useState<ETabs>(ETabs.Login);
+  const [submitting, setSubmitting] = useState(false);
+
   const { newAlert } = useAlertStore();
   const { authIsOpen, closeAuthModal } = useModalStore();
   const { authValues, setAuthValues, resetAuthValues } = useFormStore();
+  const { signIn, createUser } = useAuthStore();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleClose = () => {
+    closeAuthModal();
+    resetAuthValues();
+  };
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { name, email, password } = authValues;
 
     // Find all missing fields
     const missingFields: string[] = [];
-    if (selectedIndex === ETabs.Register && !name) missingFields.push("name"); // Field "name" is only present in registration tab
+    if (tab === ETabs.Register && !name) missingFields.push("name"); // Field "name" is only present in registration tab
     if (!email) missingFields.push("email");
     if (!password) missingFields.push("password");
 
@@ -46,90 +52,84 @@ export default function AuthModal() {
       return;
     }
 
-    switch (selectedIndex) {
+    // Sign in or register based on the selected tab
+    setSubmitting(true);
+    switch (tab) {
       case ETabs.Login:
-      // TODO: Add Login
+        if (!email || !password) return;
+        await signIn(email, password);
+        break;
       case ETabs.Register:
-      // TODO: Add Registration
+        if (!email || !password || !name) return;
+        await createUser(email, password, name);
+        break;
     }
+    setSubmitting(false);
 
-    resetAuthValues();
-    closeAuthModal();
+    // Close the modal and reset the form values
+    handleClose();
   };
 
   return (
     <FormModalWrapper
-      title="Authenticate"
+      title={tab === ETabs.Register ? "Register - Create new Account" : "Sign In - Login to your Account"}
       isOpen={authIsOpen}
       onSubmit={handleSubmit}
-      onClose={closeAuthModal}
+      onClose={handleClose}
     >
-      <TabGroup selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-        <TabList className="w-full grid grid-cols-2 gap-2 mt-1">
-          <AuthTab title="Login" />
-          <AuthTab title="Register" />
-        </TabList>
-        <TabPanels className="mt-2">
-          <TabPanel className="space-y-2">
-            <FormModalInput
-              type="email"
-              placeholder="Email"
-              autoComplete="username"
-              value={authValues.email}
-              onChange={(e) => setAuthValues({ ...authValues, email: e.target.value })}
-            />
-            <FormModalInput
-              type="password"
-              placeholder="Password"
-              autoComplete="current-password"
-              value={authValues.password}
-              onChange={(e) => setAuthValues({ ...authValues, password: e.target.value })}
-            />
-            <AlternateAction
-              text="Don't have an account?"
-              actionText="Register"
-              action={() => setSelectedIndex(ETabs.Register)}
-            />
-          </TabPanel>
+      <div className="space-y-2">
+        {tab === ETabs.Register ? (
+          <FormModalInput
+            type="text"
+            placeholder="Name"
+            autoComplete="name"
+            value={authValues.name}
+            onChange={(e) => setAuthValues({ ...authValues, name: e.target.value })}
+          />
+        ) : null}
 
-          <TabPanel className="space-y-2">
-            <FormModalInput
-              type="text"
-              placeholder="Name"
-              autoComplete="name"
-              value={authValues.name}
-              onChange={(e) => setAuthValues({ ...authValues, name: e.target.value })}
-            />
-            <FormModalInput
-              type="email"
-              placeholder="Email"
-              autoComplete="username"
-              value={authValues.email}
-              onChange={(e) => setAuthValues({ ...authValues, email: e.target.value })}
-            />
-            <FormModalInput
-              type="password"
-              placeholder="Password"
-              autoComplete="new-password"
-              value={authValues.password}
-              onChange={(e) => setAuthValues({ ...authValues, password: e.target.value })}
-            />
-            <AlternateAction
-              text="Already have an account?"
-              actionText="Sign In"
-              action={() => setSelectedIndex(ETabs.Login)}
-            />
-          </TabPanel>
-        </TabPanels>
-      </TabGroup>
+        <FormModalInput
+          type="email"
+          placeholder="Email"
+          autoComplete="username"
+          value={authValues.email}
+          onChange={(e) => setAuthValues({ ...authValues, email: e.target.value })}
+        />
 
-      <FormModalSubmitButton btnText="Submit" />
+        <FormModalInput
+          type="password"
+          placeholder="Password"
+          autoComplete={tab === ETabs.Register ? "new-password" : "current-password"}
+          value={authValues.password}
+          onChange={(e) => setAuthValues({ ...authValues, password: e.target.value })}
+        />
+
+        {tab === ETabs.Register ? (
+          <AlternateAction
+            text="Already have an account?"
+            actionText="Sign In"
+            action={() => setTab(ETabs.Login)}
+          />
+        ) : (
+          <AlternateAction
+            text="Don't have an account?"
+            actionText="Register"
+            action={() => setTab(ETabs.Register)}
+          />
+        )}
+
+        <FormModalSubmitButton
+          btnText="Submit"
+          submitting={submitting}
+          disabled={
+            (tab === ETabs.Register && !authValues.name) ||
+            !authValues.email ||
+            !authValues.password
+          }
+        />
+      </div>
     </FormModalWrapper>
   );
-}
-
-interface AuthTabProps {
-  title: string;
 }
 
 interface AlternateActionProps {
@@ -138,35 +138,18 @@ interface AlternateActionProps {
   action: () => void;
 }
 
-function AuthTab({ title }: AuthTabProps) {
-  return (
-    <Tab
-      className={cn(
-        "col-span-1",
-        "rounded-md py-2 px-3",
-        "text-sm/6 font-semibold",
-        "bg-blue-100 text-blue-800",
-        "focus:outline-1 focus:outline-blue-900",
-        "data-[selected]:bg-blue-500 data-[selected]:text-blue-50",
-      )}
-    >
-      {title}
-    </Tab>
-  );
-}
-
 function AlternateAction({ text, actionText, action }: AlternateActionProps) {
   return (
     <div className="text-blue-900/90 text-[15px] flex justify-end">
-      <div>
-        {text}
-        <button
-          onClick={action}
-          className="ml-0.5 font-medium cursor-pointer inline-block text-blue-600 hover:text-blue-700"
-        >
-          {actionText}
-        </button>
-      </div>
+      {text}
+
+      <button
+        type="button"
+        onClick={action}
+        className="ml-0.5 font-medium cursor-pointer inline-block text-blue-600 hover:text-blue-700"
+      >
+        {actionText}
+      </button>
     </div>
   );
 }
