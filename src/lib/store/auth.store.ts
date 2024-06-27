@@ -21,11 +21,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   getUser: async () => {
     try {
-      // Initially try to load user from local storage
+      // First load user stored in local storage
       const storedUser = getUserFromLocalStorage();
       if (storedUser) set({ user: storedUser });
 
-      // Fetch user from appwrite
+      // Fetch latest user data from appwrite
       const { $id, name, email, prefs } = await account.get();
       const fetchedUser: IUser = { $id, name, email, prefs };
 

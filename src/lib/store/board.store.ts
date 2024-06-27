@@ -11,6 +11,8 @@ import { IColumns } from "@/types/models/column";
 import { ITodo } from "@/types/models/task";
 import { IImage } from "@/types/utils/image";
 import { useAlertStore } from "@/lib/store/alert.stote";
+import { Permission, Role } from "appwrite";
+import { useAuthStore } from "@/lib/store/auth.store";
 
 interface BoardState {
   columns: IColumns;
@@ -28,6 +30,9 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   setColumns: (columns) => set({ columns }),
 
   fetchColumns: async () => {
+    const user = useAuthStore.getState().user;
+    if (!user) return;
+
     try {
       // First get data stored in localStorage
       const stored = getColumnFromLocalStorage();
@@ -52,6 +57,9 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   },
 
   addTask: async (todo, columnId, image) => {
+    const user = useAuthStore.getState().user;
+    if (!user) return;
+
     try {
       let file: IImage | undefined;
 
@@ -78,6 +86,11 @@ export const useBoardStore = create<BoardState>((set, get) => ({
           status: columnId,
           ...(file ? { image: JSON.stringify(file) } : {}),
         },
+        [
+          Permission.delete(Role.user(user.$id)),
+          Permission.update(Role.user(user.$id)),
+          Permission.read(Role.user(user.$id)),
+        ],
       );
 
       // Change the state by adding the newly created record
@@ -123,6 +136,9 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   },
 
   updateTask: async (todo, columnId) => {
+    const user = useAuthStore.getState().user;
+    if (!user) return;
+
     try {
       await databases.updateDocument(env.awDatabaseId, env.awTodosCollectionId, todo.$id, {
         title: todo.title,
@@ -152,6 +168,9 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   },
 
   deleteTask: async (taskIndex, todo, id) => {
+    const user = useAuthStore.getState().user;
+    if (!user) return;
+
     try {
       // Delete the image from the storage
       if (todo.image) {
