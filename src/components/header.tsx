@@ -1,6 +1,7 @@
 "use client";
 
 import Avatar from "react-avatar";
+import { useState } from "react";
 import { CheckCircleIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { useAuthStore } from "@/lib/store/auth.store";
 import { useModalStore } from "@/lib/store/modal.store";
@@ -11,7 +12,7 @@ export default function Header() {
 
   return (
     <header>
-      <div className="flex flex-col md:flex-row items-center py-2.5 px-5 bg-white/5 filter backdrop-blur-3xl rounded-b-2xl">
+      <div className="flex z-50 flex-col md:flex-row items-center py-2.5 px-5 bg-white/5 filter backdrop-blur-3xl rounded-b-2xl">
         <Logo />
 
         <div className="flex space-x-4 flex-1 justify-end w-full">
@@ -55,10 +56,43 @@ function SearchBox() {
 }
 
 function UserDropdown() {
+  const [isOpen, setIsOpen] = useState(false);
+  const { signOut } = useAuthStore();
+  const toggleMenu = () => setIsOpen(!isOpen);
+
   return (
-    <div>
-      {/*TODO: Implement a dropdown menu*/}
-      <Avatar name="Adithyan A" round color="var(--primary)" size="50" />
+    <div className="relative ml-3">
+      <div>
+        <button
+          type="button"
+          className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+          id="user-menu-button"
+          aria-expanded={isOpen}
+          aria-haspopup="true"
+          onClick={toggleMenu}
+        >
+          <span className="sr-only">Open user menu</span>
+          <Avatar name="Adithyan A" round color="var(--primary)" size="44" />
+        </button>
+      </div>
+
+      {isOpen && (
+        <div
+          className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          role="menu"
+          aria-orientation="vertical"
+          aria-labelledby="user-menu-button"
+        >
+          <button
+            className="block w-full px-4 py-2 rounded-sm text-sm text-gray-700 hover:bg-black/10"
+            onClick={signOut}
+            role="menuitem"
+            id="user-menu-item-2"
+          >
+            Sign out
+          </button>
+        </div>
+      )}
     </div>
   );
 }
