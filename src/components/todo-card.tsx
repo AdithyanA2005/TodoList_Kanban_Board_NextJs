@@ -44,7 +44,7 @@ export default function TodoCard({
       {...draggableProps}
       {...dragHandleProps}
       ref={innerRef}
-      className="group bg-white rounded-sm drop-shadow-md"
+      className="group outline-none select-none relative bg-white rounded-sm drop-shadow-md"
     >
       {imageUrl ? (
         <div className="h-full w-full rounded-t-md">
@@ -64,13 +64,13 @@ export default function TodoCard({
           onClick={() => deleteTask(index, todo, id)}
           className={cn(
             "hidden group-hover:block",
-            "absolute top-2.5 right-2.5",
-            "p-1 ml-5 rounded-full",
-            "text-gray-600 hover:text-red-600",
-            "filter backdrop-blur-3xl bg-white/30",
+            "absolute right-0 top-0 translate-x-1/4 -translate-y-1/4",
+            "shadow-2xl rounded-full p-[5px]",
+            "bg-red-100 text-gray-800 hover:text-red-700",
+            "transition duration-200",
           )}
         >
-          <XMarkIcon className="size-[20px]" />
+          <XMarkIcon className="size-5 " strokeWidth={2.1} />
           <span className="sr-only">Close</span>
         </button>
       </div>
