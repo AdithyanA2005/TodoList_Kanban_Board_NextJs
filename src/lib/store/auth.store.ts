@@ -11,10 +11,10 @@ import getUserFromLocalStorage from "@/lib/utils/localStorage/get-user-from-loca
 
 interface AuthState {
   user: IUser | null;
-  getUser: () => void;
-  createUser: (email: string, password: string, name: string) => void;
-  signIn: (email: string, password: string) => void;
-  signOut: () => void;
+  getUser: () => Promise<void>;
+  createUser: (email: string, password: string, name: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -36,6 +36,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       }
     } catch (error: any) {
       if (error.type !== "general_unauthorized_scope")
+        // This error is expected when user is not logged in
+        // Show alert for all other errors
         useAlertStore.getState().newAlert(
           {
             title: "Unable to get user data",
@@ -79,6 +81,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   signOut: async () => {
     deleteColumnsFromLocalStorage();
     deleteUserFromLocalStorage();
+    set({ user: null });
 
     try {
       await account.deleteSessions();
