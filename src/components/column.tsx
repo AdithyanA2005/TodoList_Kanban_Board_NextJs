@@ -41,7 +41,7 @@ export default function Column({ id, todos, index }: ColumnProps) {
                 ref={provided.innerRef}
                 className={`p-2 rounded-2xl shadow-sm ${snapshot.isDraggingOver ? "bg-green-200" : "bg-white/50"}`}
               >
-                <h2 className="group h-10 flex justify-between font-bold text-xl p-1.5">
+                <h2 className="group h-10 flex justify-between font-semibold text-xl p-1.5">
                   <div className="flex items-center gap-1">
                     <span>{getColumnDisplayName(id)}</span>
                     <span className="h-7 aspect-square text-gray-500 bg-gray-200 rounded-full px-2 py-1 font-mono text-xs flex justify-center items-center">

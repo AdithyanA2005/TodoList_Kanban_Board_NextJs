@@ -46,8 +46,8 @@ export default function FormModalWrapper({
               leaveTo="opacity-0 scale-95"
             >
               <DialogPanel className="overflow-hidden rounded-2xl p-6 w-full max-w-md text-left bg-white shadow-xl transform transition-all">
-                <div className="flex justify-between items-center pb-4">
-                  <DialogTitle as="h2" className="text-xl font-medium leading-6 text-gray-900">
+                <div className="flex justify-between items-center mb-6">
+                  <DialogTitle as="h2" className="text-[22px] font-medium leading-6 text-gray-700">
                     {title}
                   </DialogTitle>
                   <CloseButton>
