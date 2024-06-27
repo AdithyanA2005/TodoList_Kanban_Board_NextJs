@@ -29,16 +29,14 @@ export const useBoardStore = create<BoardState>((set, get) => ({
 
   fetchColumns: async () => {
     try {
-      // Use data from local storage on initial load
-      if (get().columns.size === 0) {
-        const stored = getColumnFromLocalStorage();
-        set({ columns: stored });
-      }
+      // First get data stored in localStorage
+      const stored = getColumnFromLocalStorage();
+      set({ columns: stored });
 
+      // Fetch the latest data from the database
       const fetchedColumns = await getTodosGroupedByType();
       const filledColumns = fillWithEmptyColumns(fetchedColumns);
       // TODO: Sort columns according to the users preference
-
       setColumnsInLocalStorage(filledColumns);
       set({ columns: filledColumns });
     } catch (error: any) {
