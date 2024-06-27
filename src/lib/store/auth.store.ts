@@ -9,7 +9,7 @@ import deleteColumnsFromLocalStorage from "@/lib/utils/localStorage/delete-colum
 import deleteUserFromLocalStorage from "@/lib/utils/localStorage/delete-user-from-local-storage";
 import getUserFromLocalStorage from "@/lib/utils/localStorage/get-user-from-local-storage";
 import { useBoardStore } from "@/lib/store/board.store";
-import fillWithEmptyColumns from "@/lib/utils/fillWithEmptyColumns";
+import fillWithEmptyColumns from "@/lib/utils/fill-with-empty-columns";
 
 interface AuthState {
   user: IUser | null;

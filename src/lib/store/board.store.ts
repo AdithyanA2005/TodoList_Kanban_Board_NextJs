@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import env from "@/lib/env";
 import { databases, ID, storage } from "@/lib/appwrite";
-import uploadImage from "@/lib/appwrite/uploadImage";
-import fillWithEmptyColumns from "@/lib/utils/fillWithEmptyColumns";
-import getTodosGroupedByType from "@/lib/appwrite/getTodosGroupedByType";
+import uploadImage from "@/lib/appwrite/upload-image";
+import fillWithEmptyColumns from "@/lib/utils/fill-with-empty-columns";
+import getTaskColumns from "@/lib/appwrite/get-task-columns";
 import getColumnFromLocalStorage from "@/lib/utils/localStorage/get-columns-from-local-storage";
 import setColumnsInLocalStorage from "@/lib/utils/localStorage/set-columns-in-local-storage";
 import { EAlertTypes, ETaskTypes } from "@/types/enums";
@@ -41,7 +41,7 @@ export const useBoardStore = create<BoardState>((set, get) => ({
 
       // Fetch the latest data from the database and format it
       const order = [ETaskTypes.Todo, ETaskTypes.Doing, ETaskTypes.Done];
-      let newColumns = await getTodosGroupedByType();
+      let newColumns = await getTaskColumns();
       newColumns = fillWithEmptyColumns(newColumns);
       newColumns = sortColumns(newColumns, order);
 

@@ -8,7 +8,7 @@ import { useModalStore } from "@/lib/store/modal.store";
 import { useFormStore } from "@/lib/store/form.store";
 import { useAlertStore } from "@/lib/store/alert.stote";
 import { useAuthStore } from "@/lib/store/auth.store";
-import joinWithAnd from "@/lib/utils/localStorage/join-with-and";
+import joinWithAnd from "@/lib/utils/join-with-and";
 import { EAlertTypes } from "@/types/enums";
 
 enum ETabs {

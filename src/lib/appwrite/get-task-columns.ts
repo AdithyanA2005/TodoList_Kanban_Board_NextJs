@@ -3,7 +3,7 @@ import { databases } from "@/lib/appwrite";
 import { ETaskTypes } from "@/types/enums";
 import { IColumn, IColumns } from "@/types/models/column";
 
-export default async function getTodosGroupedByType(): Promise<IColumns> {
+export default async function getTaskColumns(): Promise<IColumns> {
   const data = await databases.listDocuments(env.awDatabaseId, env.awTodosCollectionId);
 
   return data.documents.reduce((acc, todo) => {
