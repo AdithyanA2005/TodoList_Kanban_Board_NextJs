@@ -91,6 +91,7 @@ export default function Board() {
             {Array.from(columns.entries()).map(([columnId, column], index) => (
               <Column key={columnId} id={columnId} todos={column.todos} index={index} />
             ))}
+            {provided.placeholder}
           </div>
         )}
       </Droppable>
