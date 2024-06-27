@@ -1,23 +1,23 @@
 "use client";
 
-import Avatar from "react-avatar";
-import { useState } from "react";
 import { CheckCircleIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
 import { useAuthStore } from "@/lib/store/auth.store";
 import { useModalStore } from "@/lib/store/modal.store";
 import { useFormStore } from "@/lib/store/form.store";
+import cn from "@/lib/utils/cn";
 
 export default function Header() {
   const { user } = useAuthStore();
 
   return (
     <header>
-      <div className="flex z-50 flex-col md:flex-row items-center py-2.5 px-5 bg-white/5 filter backdrop-blur-3xl rounded-b-2xl">
+      <div className="flex flex-col sm:flex-row items-center gap-2 py-2.5 px-5 bg-white/5 filter backdrop-blur-3xl rounded-b-2xl">
         <Logo />
 
-        <div className="flex space-x-4 flex-1 justify-end w-full">
+        <div className="w-full h-11 space-x-3 flex justify-center sm:justify-end">
           <SearchBox />
-          {user ? <UserDropdown /> : <AuthButton />}
+          {user ? <SignOutButton /> : <AuthButton />}
         </div>
       </div>
     </header>
@@ -37,7 +37,7 @@ function SearchBox() {
   const { searchValue, setSearchValue } = useFormStore();
 
   return (
-    <form className="flex-1 md:flex-initial flex items-center space-x-2 rounded-md p-2.5 shadow-md bg-white">
+    <form className="flex-1 max-w-md sm:max-w-xs flex items-center space-x-2 rounded-md p-2.5 shadow-md bg-white">
       <MagnifyingGlassIcon className="h-6 w-6 text-gray-400" />
 
       <input
@@ -55,45 +55,23 @@ function SearchBox() {
   );
 }
 
-function UserDropdown() {
-  const [isOpen, setIsOpen] = useState(false);
+function SignOutButton() {
   const { signOut } = useAuthStore();
-  const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <div className="relative ml-3">
-      <div>
-        <button
-          type="button"
-          className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-          id="user-menu-button"
-          aria-expanded={isOpen}
-          aria-haspopup="true"
-          onClick={toggleMenu}
-        >
-          <span className="sr-only">Open user menu</span>
-          <Avatar name="Adithyan A" round color="var(--primary)" size="44" />
-        </button>
-      </div>
-
-      {isOpen && (
-        <div
-          className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-          role="menu"
-          aria-orientation="vertical"
-          aria-labelledby="user-menu-button"
-        >
-          <button
-            className="block w-full px-4 py-2 rounded-sm text-sm text-gray-700 hover:bg-black/10"
-            onClick={signOut}
-            role="menuitem"
-            id="user-menu-item-2"
-          >
-            Sign out
-          </button>
-        </div>
+    <button
+      onClick={signOut}
+      title="Sign Out"
+      className={cn(
+        "h-[inherit] aspect-square",
+        "grid place-items-center",
+        "rounded-full text-sm",
+        "shadow-md filter backdrop-blur-3xl bg-white hover:bg-white/80 text-gray-700",
+        "focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800",
       )}
-    </div>
+    >
+      <ArrowLeftStartOnRectangleIcon className="h-6 w-6 " />
+    </button>
   );
 }
 
