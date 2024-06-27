@@ -33,7 +33,7 @@ const authInitialValues = { name: "", email: "", password: "" };
 export const useFormStore = create<FormState>((set, get) => ({
   newTodoValues: newTodoInitialValues,
   setNewTodoValues: (newTodoValues) => set({ newTodoValues }),
-  resetNewTodoValues: () => set({ newTodoValues: newTodoInitialValues }),
+  resetNewTodoValues: () => setTimeout(() => set({ newTodoValues: newTodoInitialValues }), 300),
 
   searchValue: "",
   setSearchValue: (searchValue) => set({ searchValue }),
@@ -41,5 +41,5 @@ export const useFormStore = create<FormState>((set, get) => ({
 
   authValues: authInitialValues,
   setAuthValues: (authValues) => set({ authValues }),
-  resetAuthValues: () => set({ authValues: authInitialValues }),
+  resetAuthValues: () => setTimeout(() => set({ authValues: authInitialValues }), 300),
 }));

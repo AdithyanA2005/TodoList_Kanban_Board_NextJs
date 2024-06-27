@@ -26,8 +26,8 @@ export default function NewTodoModal() {
   const setTitle = (title: string) => setNewTodoValues({ ...newTodoValues, title });
 
   const handleClose = () => {
-    resetNewTodoValues();
     closeNewTodoModal();
+    resetNewTodoValues();
   };
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
