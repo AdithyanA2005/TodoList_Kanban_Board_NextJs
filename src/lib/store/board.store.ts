@@ -14,11 +14,11 @@ import { IImage } from "@/types/utils/image";
 interface BoardState {
   columns: IColumns;
   setColumns: (columns: IColumns) => void;
-  fetchColumns: () => void;
+  fetchColumns: () => Promise<void>;
 
-  addTask: (todo: string, columnId: ETaskTypes, image?: File | null) => void;
-  updateTask: (todo: ITodo, columnId: ETaskTypes) => void;
-  deleteTask: (taskIndex: number, todo: ITodo, id: ETaskTypes) => void;
+  addTask: (todo: string, columnId: ETaskTypes, image?: File | null) => Promise<void>;
+  updateTask: (todo: ITodo, columnId: ETaskTypes) => Promise<void>;
+  deleteTask: (taskIndex: number, todo: ITodo, id: ETaskTypes) => Promise<void>;
 }
 
 export const useBoardStore = create<BoardState>((set, get) => ({

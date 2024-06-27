@@ -23,12 +23,12 @@ export default function NewTodoModal() {
   const { title, image, type } = newTodoValues;
   const setTitle = (title: string) => setNewTodoValues({ ...newTodoValues, title });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Add the task to the board if title is not empty
     if (title) {
-      addTask(title, type, image);
+      await addTask(title, type, image);
       resetNewTodoValues();
       closeNewTodoModal();
     } else {

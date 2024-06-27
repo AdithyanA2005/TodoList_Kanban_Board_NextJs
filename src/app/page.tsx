@@ -17,8 +17,9 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (user) fetchColumns();
-  }, []);
+    (async function () {
+      if (user) await fetchColumns();
+    })();
   }, [user]);
 
   return (

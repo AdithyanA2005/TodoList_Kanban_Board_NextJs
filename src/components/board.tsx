@@ -8,7 +8,7 @@ import { IColumn } from "@/types/models/column";
 export default function Board() {
   const { columns, setColumns, updateTask } = useBoardStore();
 
-  const handleColumnDragEnd = (result: DropResult) => {
+  const handleColumnDragEnd = async (result: DropResult) => {
     const { destination, source, type } = result;
 
     // Check if the user dragged the card outside of board
@@ -72,8 +72,8 @@ export default function Board() {
             todos: finishedTodos,
           });
 
-          updateTask(todoMoved, destinationCol.id);
-
+          // TODO: move setting column to updateTask function to handle fail cases
+          await updateTask(todoMoved, destinationCol.id);
           setColumns(newColumns);
         }
     }
