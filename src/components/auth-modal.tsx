@@ -74,12 +74,14 @@ export default function AuthModal() {
             <FormModalInput
               type="email"
               placeholder="Email"
+              autoComplete="username"
               value={authValues.email}
               onChange={(e) => setAuthValues({ ...authValues, email: e.target.value })}
             />
             <FormModalInput
               type="password"
               placeholder="Password"
+              autoComplete="current-password"
               value={authValues.password}
               onChange={(e) => setAuthValues({ ...authValues, password: e.target.value })}
             />
@@ -94,18 +96,21 @@ export default function AuthModal() {
             <FormModalInput
               type="text"
               placeholder="Name"
+              autoComplete="name"
               value={authValues.name}
               onChange={(e) => setAuthValues({ ...authValues, name: e.target.value })}
             />
             <FormModalInput
               type="email"
               placeholder="Email"
+              autoComplete="username"
               value={authValues.email}
               onChange={(e) => setAuthValues({ ...authValues, email: e.target.value })}
             />
             <FormModalInput
               type="password"
               placeholder="Password"
+              autoComplete="new-password"
               value={authValues.password}
               onChange={(e) => setAuthValues({ ...authValues, password: e.target.value })}
             />
