@@ -2,6 +2,7 @@ import { create } from "zustand";
 import env from "@/lib/env";
 import { databases, ID, storage } from "@/lib/appwrite";
 import uploadImage from "@/lib/appwrite/uploadImage";
+import fillWithEmptyColumns from "@/lib/utils/fillWithEmptyColumns";
 import getTodosGroupedByType from "@/lib/appwrite/getTodosGroupedByType";
 import getColumnFromLocalStorage from "@/lib/utils/localStorage/get-columns-from-local-storage";
 import setColumnsInLocalStorage from "@/lib/utils/localStorage/set-columns-in-local-storage";
@@ -21,7 +22,8 @@ interface BoardState {
 }
 
 export const useBoardStore = create<BoardState>((set, get) => ({
-  columns: new Map(),
+  columns: fillWithEmptyColumns(),
+
   setColumns: (columns) => set({ columns }),
 
   fetchColumns: async () => {
@@ -31,10 +33,12 @@ export const useBoardStore = create<BoardState>((set, get) => ({
       set({ columns: stored });
     }
 
-    // Fetch latest data from the database
-    const columns = await getTodosGroupedByType();
-    setColumnsInLocalStorage(columns);
-    set({ columns });
+    const fetchedColumns = await getTodosGroupedByType();
+    const filledColumns = fillWithEmptyColumns(fetchedColumns);
+    // TODO: Sort columns according to the users preference
+
+    setColumnsInLocalStorage(filledColumns);
+    set({ columns: filledColumns });
   },
 
   addTask: async (todo, columnId, image) => {
