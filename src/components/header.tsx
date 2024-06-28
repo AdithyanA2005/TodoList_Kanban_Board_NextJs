@@ -12,12 +12,15 @@ export default function Header() {
 
   return (
     <header>
-      <div className="flex flex-col sm:flex-row items-center gap-2 py-2.5 px-5 bg-white/5 filter backdrop-blur-3xl rounded-b-2xl">
-        <Logo />
+      <div className="flex flex-col sm:flex-row items-center gap-2 py-2.5 px-2 sm:px-4 bg-white/20 filter backdrop-blur-3xl rounded-b-2xl">
+        <div className="h-11 w-full flex justify-between xs:justify-center sm:justify-start">
+          <Logo />
+          <div className="flex xs:hidden">{user ? <SignOutButton /> : <AuthButton />}</div>
+        </div>
 
-        <div className="w-full h-11 space-x-3 flex justify-center sm:justify-end">
+        <div className="h-11 w-full gap-3 flex justify-center sm:justify-end">
           <SearchBox />
-          {user ? <SignOutButton /> : <AuthButton />}
+          <div className="hidden xs:flex">{user ? <SignOutButton /> : <AuthButton />}</div>
         </div>
       </div>
     </header>
@@ -26,7 +29,7 @@ export default function Header() {
 
 function Logo() {
   return (
-    <h1 className="transition hover:scale-105 px-2 space-x-2 rounded-md filter backdrop-blur-3xl flex items-center font-bold font-mono text-primary text-2xl">
+    <h1 className="transition hover:scale-105 space-x-2 rounded-md filter backdrop-blur-3xl flex items-center font-bold font-mono text-primary text-2xl">
       <CheckCircleIcon className="size-8 text-primary" />
       <span>AdisTodo</span>
     </h1>
@@ -37,7 +40,7 @@ function SearchBox() {
   const { searchValue, setSearchValue } = useFormStore();
 
   return (
-    <form className="flex-1 max-w-md sm:max-w-xs flex items-center space-x-2 rounded-md p-2.5 shadow-md bg-white">
+    <form className="flex-1 sm:max-w-xs flex items-center space-x-2 rounded-md p-2.5 shadow-md bg-white">
       <MagnifyingGlassIcon className="h-6 w-6 text-gray-400" />
 
       <input
@@ -63,14 +66,14 @@ function SignOutButton() {
       onClick={signOut}
       title="Sign Out"
       className={cn(
-        "h-[inherit] aspect-square",
-        "grid place-items-center",
-        "rounded-full text-sm",
-        "shadow-md filter backdrop-blur-3xl bg-white hover:bg-white/80 text-gray-700",
+        "size-11 shadow-md ",
+        "text-gray-700 hover:text-red-600",
+        "grid place-items-center rounded-full text-sm",
+        "bg-white hover:bg-white/80 filter backdrop-blur-3xl",
         "focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800",
       )}
     >
-      <ArrowLeftStartOnRectangleIcon className="h-6 w-6 " />
+      <ArrowLeftStartOnRectangleIcon className="123size-[22px] size-6" />
     </button>
   );
 }
