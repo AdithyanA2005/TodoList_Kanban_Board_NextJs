@@ -8,8 +8,8 @@ import setUserInLocalStorage from "@/lib/utils/localStorage/set-user-in-local-st
 import deleteColumnsFromLocalStorage from "@/lib/utils/localStorage/delete-columns-from-local-storage";
 import deleteUserFromLocalStorage from "@/lib/utils/localStorage/delete-user-from-local-storage";
 import getUserFromLocalStorage from "@/lib/utils/localStorage/get-user-from-local-storage";
+import getFilledColumns from "@/lib/utils/columns-modifiers/get-filled-columns";
 import { useBoardStore } from "@/lib/store/board.store";
-import fillWithEmptyColumns from "@/lib/utils/fill-with-empty-columns";
 
 interface AuthState {
   user: IUser | null;
@@ -84,7 +84,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     deleteColumnsFromLocalStorage();
     deleteUserFromLocalStorage();
     set({ user: null });
-    useBoardStore.getState().setColumns(fillWithEmptyColumns());
+    useBoardStore.getState().setColumns(getFilledColumns());
 
     try {
       await account.deleteSessions();

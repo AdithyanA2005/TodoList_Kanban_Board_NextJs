@@ -2,7 +2,6 @@ import { create } from "zustand";
 import env from "@/lib/env";
 import { databases, ID, storage } from "@/lib/appwrite";
 import uploadImage from "@/lib/appwrite/upload-image";
-import fillWithEmptyColumns from "@/lib/utils/fill-with-empty-columns";
 import getTaskColumns from "@/lib/appwrite/get-task-columns";
 import getColumnFromLocalStorage from "@/lib/utils/localStorage/get-columns-from-local-storage";
 import setColumnsInLocalStorage from "@/lib/utils/localStorage/set-columns-in-local-storage";
@@ -13,7 +12,8 @@ import { IImage } from "@/types/utils/image";
 import { useAlertStore } from "@/lib/store/alert.stote";
 import { Permission, Role } from "appwrite";
 import { useAuthStore } from "@/lib/store/auth.store";
-import sortColumns from "@/lib/utils/sort-columns";
+import getFilledColumns from "@/lib/utils/columns-modifiers/get-filled-columns";
+import getSortedColumns from "@/lib/utils/columns-modifiers/get-sorted-columns";
 import setTempColumnsInLocalStorage from "@/lib/utils/localStorage/set-temp-colums-in-local-storage";
 import getTempColumnFromLocalStorage from "@/lib/utils/localStorage/get-temp-columns-from-local-storage";
 
@@ -31,7 +31,7 @@ export const useBoardStore = create<BoardState>((set, get) => {
   const order = [ETaskTypes.Todo, ETaskTypes.Doing, ETaskTypes.Done];
 
   return {
-    columns: sortColumns(fillWithEmptyColumns(), order),
+    columns: getSortedColumns(getFilledColumns(), order),
 
     setColumns: (columns) => set({ columns }),
 
@@ -45,8 +45,8 @@ export const useBoardStore = create<BoardState>((set, get) => {
 
           // Fetch the latest data from the database and format it
           let fetchedColumns = await getTaskColumns();
-          fetchedColumns = fillWithEmptyColumns(fetchedColumns);
-          fetchedColumns = sortColumns(fetchedColumns, order);
+          fetchedColumns = getFilledColumns(fetchedColumns);
+          fetchedColumns = getSortedColumns(fetchedColumns, order);
 
           // Update the state and localStorage with the latest data
           setColumnsInLocalStorage(fetchedColumns);
@@ -57,7 +57,7 @@ export const useBoardStore = create<BoardState>((set, get) => {
         // Get temp data from localStorage OR Initialize temp data in localStorage
         const storedColumns = getTempColumnFromLocalStorage();
         if (storedColumns.size !== 0) set({ columns: storedColumns });
-        else setTempColumnsInLocalStorage(sortColumns(fillWithEmptyColumns(), order));
+        else setTempColumnsInLocalStorage(getSortedColumns(getFilledColumns(), order));
       } catch (error: any) {
         useAlertStore.getState().newAlert(
           {
@@ -134,9 +134,9 @@ export const useBoardStore = create<BoardState>((set, get) => {
           const column = newColumns.get(columnId);
 
           if (!column) {
-            newColumns = fillWithEmptyColumns(newColumns);
+            newColumns = getFilledColumns(newColumns);
             newColumns.set(columnId, { id: columnId, todos: [newTodo] });
-            newColumns = sortColumns(newColumns, order);
+            newColumns = getSortedColumns(newColumns, order);
           } else {
             column.todos.push(newTodo);
           }

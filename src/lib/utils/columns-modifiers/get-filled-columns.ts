@@ -1,7 +1,7 @@
 import { ETaskTypes } from "@/types/enums";
 import { IColumn, IColumns } from "@/types/models/column";
 
-export default function fillWithEmptyColumns(columns?: IColumns): IColumns {
+export default function getFilledColumns(columns?: IColumns): IColumns {
   const newColumns = new Map<ETaskTypes, IColumn>(columns);
   const columnTypes: ETaskTypes[] = Object.values(ETaskTypes);
 
