@@ -10,6 +10,9 @@ import deleteUserFromLocalStorage from "@/lib/utils/localStorage/delete-user-fro
 import getUserFromLocalStorage from "@/lib/utils/localStorage/get-user-from-local-storage";
 import getFilledColumns from "@/lib/utils/columns-modifiers/get-filled-columns";
 import { useBoardStore } from "@/lib/store/board.store";
+import { ITodo } from "@/types/models/task";
+import getTempColumnFromLocalStorage from "@/lib/utils/localStorage/get-temp-columns-from-local-storage";
+import deleteTempColumnsFromLocalStorage from "@/lib/utils/localStorage/delete-temp-columns-from-local-storage";
 
 interface AuthState {
   user: IUser | null;
@@ -58,6 +61,31 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       useAlertStore.getState().newAlert(
         {
           title: "Unable to login",
+          message: error.message,
+          type: EAlertTypes.Error,
+        },
+        5000,
+      );
+    }
+
+    try {
+      const storedColumns = getTempColumnFromLocalStorage();
+      if (storedColumns) {
+        const todos = Array.from(storedColumns.values()).reduce(
+          (acc: ITodo[], column) => [...acc, ...column.todos],
+          [],
+        );
+
+        for (const todo of todos) {
+          await useBoardStore.getState().addTask(todo.title, todo.status);
+        }
+
+        deleteTempColumnsFromLocalStorage();
+      }
+    } catch (error: any) {
+      useAlertStore.getState().newAlert(
+        {
+          title: "Unable to add your existing tasks",
           message: error.message,
           type: EAlertTypes.Error,
         },
