@@ -58,7 +58,7 @@ export default function Board() {
         } else {
           // Dragging to another column
           const finishedTodos = Array.from(destinationCol.todos);
-          finishedTodos.splice(destination.index, 1, todoMoved);
+          finishedTodos.splice(destination.index, 0, todoMoved);
 
           const newColumns = new Map(columns);
           const newCol = {
@@ -73,8 +73,8 @@ export default function Board() {
           });
 
           // TODO: move setting column to updateTask function to handle fail cases
-          await updateTask(todoMoved, destinationCol.id);
           setColumns(newColumns);
+          await updateTask(todoMoved, destinationCol.id);
         }
     }
   };
