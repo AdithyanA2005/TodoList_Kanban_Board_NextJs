@@ -72,7 +72,6 @@ export default function Board() {
             todos: finishedTodos,
           });
 
-          // TODO: move setting column to updateTask function to handle fail cases
           setColumns(newColumns);
           await updateTask(todoMoved, destinationCol.id);
         }

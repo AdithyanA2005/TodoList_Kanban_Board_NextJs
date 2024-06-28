@@ -170,7 +170,18 @@ export const useBoardStore = create<BoardState>((set, get) => {
 
     updateTask: async (todo, columnId) => {
       const user = useAuthStore.getState().user;
-      if (!user) return;
+      if (!user) {
+        const newColumns = new Map(get().columns);
+        const column = newColumns.get(columnId);
+        if (!column) return;
+        const taskIndex = column.todos.findIndex((task) => task.$id === todo.$id);
+        if (taskIndex === -1) return;
+
+        column.todos[taskIndex] = todo;
+        set({ columns: newColumns });
+        setTempColumnsInLocalStorage(newColumns);
+        return;
+      }
 
       try {
         await databases.updateDocument(env.awDatabaseId, env.awTodosCollectionId, todo.$id, {
@@ -202,7 +213,13 @@ export const useBoardStore = create<BoardState>((set, get) => {
 
     deleteTask: async (taskIndex, todo, id) => {
       const user = useAuthStore.getState().user;
-      if (!user) return;
+      if (!user) {
+        const newColumns = new Map(get().columns);
+        newColumns.get(id)?.todos.splice(taskIndex, 1);
+        set({ columns: newColumns });
+        setTempColumnsInLocalStorage(newColumns);
+        return;
+      }
 
       try {
         // Delete the image from the storage
