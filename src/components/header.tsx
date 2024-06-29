@@ -1,11 +1,13 @@
 "use client";
 
+import { ChangeEvent, useState } from "react";
 import { CheckCircleIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
 import { useAuthStore } from "@/lib/store/auth.store";
 import { useModalStore } from "@/lib/store/modal.store";
 import { useFormStore } from "@/lib/store/form.store";
 import cn from "@/lib/utils/cn";
+import debounce from "@/lib/utils/debounce";
 
 export default function Header() {
   const { user } = useAuthStore();
@@ -38,6 +40,13 @@ function Logo() {
 
 function SearchBox() {
   const { searchValue, setSearchValue } = useFormStore();
+  const [value, setValue] = useState<string>(searchValue);
+  const debounceSetSearchValue = debounce((text: string) => setSearchValue(text), 500);
+
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    debounceSetSearchValue(e.target.value);
+  }
 
   return (
     <form className="flex-1 sm:max-w-xs flex items-center space-x-2 rounded-md p-2.5 shadow-md bg-white">
@@ -46,8 +55,8 @@ function SearchBox() {
       <input
         type="text"
         placeholder="Search"
-        value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
+        value={value}
+        onChange={handleOnChange}
         className="flex-1 outline-none"
       />
 
